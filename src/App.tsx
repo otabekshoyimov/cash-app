@@ -2,7 +2,7 @@ export function App() {
 
   return (
     <>
-    <div className="text-pink-400">test</div>
+    <div className="text-pink-400">testing...</div>
     </>
   )
 }
