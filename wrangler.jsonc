@@ -1,6 +1,6 @@
 {
   "name": "cash-app-worker",
-  "main": "./src/main.ts",
+  "main": "./src/main.js",
   "compatibility_date": "2025-08-07",
   "assets": {
     "directory": "./dist",
