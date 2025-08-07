@@ -17,3 +17,28 @@
   margin: 0;
   padding: 0;
 }
+
+button {
+  font: inherit;
+}
+
+form {
+  font-size: inherit;
+  display: block;
+}
+
+dialog {
+  border: 0;
+  max-inline-size: min(90vw, 60ch);
+  max-width: 520px;
+  max-height: fit-content;
+  width: calc(100% - 28px);
+  height: 100%;
+  padding: 0;
+  margin: auto;
+  border-radius: 10px;
+}
+/* 
+dialog::backdrop {
+  opacity: 0.75;
+} */
