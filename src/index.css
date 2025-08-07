@@ -1,11 +1,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Overused Grotesk";
+  src:
+    url("OverusedGrotesk-VF.woff2") format("woff2 supports variations"),
+    url("OverusedGrotesk-VF.woff2") format("woff2-variations");
+  font-weight: 300 900;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Overused Grotesk";
   line-height: 1.5;
   font-weight: 400;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -16,6 +23,14 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+html, 
+body {
+  height: 100%;
+}
+
+ul {
+  list-style: none;
 }
 
 button {

@@ -27,19 +27,43 @@ export async function indexAction({ request }: { request: Request }) {
 
 export function App() {
   return (
-    <>
-      <section className="px-5 pt-5">
-        <Dashboard />
-      </section>
-    </>
+    <div className="flex px-16 h-screen ">
+      <Sidebar />
+
+      <Dashboard />
+    </div>
   );
 }
+
+const Sidebar = () => {
+  return (
+    <>
+      <nav className="w-[250px] pt-[36px] h-full">
+        <header className="pb-20 text-xl font-medium">Cash app</header>
+        <ul className="font-medium ">
+          <li>Activity</li>
+          <li>Cash</li>
+          <li>Savings</li>
+          <li>Card</li>
+          <li>Pay & Request</li>
+          <li>Tax filling</li>
+          <li>Documents</li>
+          <li>Account</li>
+          <li>Support</li>
+          <li>Log out</li>
+        </ul>
+      </nav>
+    </>
+  );
+};
 const Dashboard = () => {
   return (
-    <section className="px-20 pt-20">
-      <DashboardHeader />
-      <DashboardOverview />
-      <DashboardHistoy />
+    <section className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full">
+      <div className="bg-white px-16 py-16 rounded-2xl h-full">
+        <DashboardHeader />
+        <DashboardOverview />
+        <DashboardHistoy />
+      </div>
     </section>
   );
 };
