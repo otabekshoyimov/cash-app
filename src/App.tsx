@@ -6,7 +6,11 @@ export async function indexLoader() {
   return transactions;
 }
 
-export async function indexAction({ request }) {
+type transaction = {
+  description: string;
+  amount: number;
+};
+export async function indexAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const description = formData.get("description");
   const amount = formData.get("amount");
@@ -104,7 +108,7 @@ const DashboardOverview = () => {
           <span>dash overview content</span>
         </main>
         <ul>
-          {transactions.map((transaction) => (
+          {transactions.map((transaction: transaction) => (
             <li className="flex gap-10">
               <span>{transaction.description}</span>
               <span>{transaction.amount}</span>
