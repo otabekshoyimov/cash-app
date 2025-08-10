@@ -1,14 +1,30 @@
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { App, indexAction, indexLoader } from "./App.tsx";
+import { App } from "./App.tsx";
+import {
+  TransactionItem,
+  TransactionItemLoader,
+} from "./pages/transaction-item/ui/TransactionItem.tsx";
 import "./index.css";
+import { Dashboard, indexAction, indexLoader } from "./index.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    action: indexAction,
-    loader: indexLoader,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+        action: indexAction,
+        loader: indexLoader,
+      },
+      {
+        path: "/:transactionId",
+        element: <TransactionItem />,
+        loader: TransactionItemLoader,
+      },
+    ],
   },
 ]);
 

@@ -1,37 +1,14 @@
-import { useRef } from "react";
-import { useFetcher, useLoaderData } from "react-router";
-
-export async function indexLoader() {
-  const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-  return transactions;
-}
-
-type transaction = {
-  description: string;
-  amount: number;
-};
-export async function indexAction({ request }: { request: Request }) {
-  const formData = await request.formData();
-  const description = formData.get("description");
-  const amount = formData.get("amount");
-  console.log("Action received data:", { description, amount });
-
-  const existing_transanctions = JSON.parse(
-    localStorage.getItem("transactions") || "[]",
-  );
-  const new_transaction = { description: description, amount: Number(amount) };
-  const updated_transactions = [...existing_transanctions, new_transaction];
-  localStorage.setItem("transactions", JSON.stringify(updated_transactions));
-  return updated_transactions;
-}
+import { type SVGProps } from "react";
+import { NavLink, Outlet } from "react-router";
 
 export function App() {
   return (
-    <div className="flex px-16 h-screen ">
-      <Sidebar />
-
-      <Dashboard />
-    </div>
+    <>
+      <div className="flex px-16 h-screen ">
+        <Sidebar />
+        <Outlet />
+      </div>
+    </>
   );
 }
 
@@ -40,115 +17,50 @@ const Sidebar = () => {
     <>
       <nav className="w-[250px] pt-[36px] h-full">
         <header className="pb-20 text-xl font-medium">Cash app</header>
-        <ul className="font-medium ">
-          <li>Activity</li>
-          <li>Cash</li>
-          <li>Savings</li>
-          <li>Card</li>
-          <li>Pay & Request</li>
-          <li>Tax filling</li>
-          <li>Documents</li>
-          <li>Account</li>
-          <li>Support</li>
-          <li>Log out</li>
+        <ul className="pr-16">
+          <NavlinkItem linkLabel="Activity" linkTo={"/"} />
+          <NavlinkItem linkLabel="Cash" linkTo={"/cash"} />
+          <NavlinkItem linkLabel="Savings" linkTo={"/savings"} />
+          <NavlinkItem linkLabel="Card" linkTo={"/card"} />
+          <NavlinkItem linkLabel="Pay & Request" linkTo={"/pay"} />
+          <NavlinkItem linkLabel="Tax filling" linkTo={"/tax"} />
+          <NavlinkItem linkLabel="Documents" linkTo={"/docs"} />
+          <NavlinkItem linkLabel="Account" linkTo={"/account"} />
+          <NavlinkItem linkLabel="Support" linkTo={"/support"} />
+          <NavlinkItem linkLabel="Log out" linkTo={"/logout"} />
         </ul>
       </nav>
     </>
   );
 };
-const Dashboard = () => {
+
+const NavlinkItem = (props: { linkLabel: string; linkTo: string }) => {
   return (
-    <section className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full">
-      <div className="bg-white px-16 py-16 rounded-2xl h-full">
-        <DashboardHeader />
-        <DashboardOverview />
-        <DashboardHistoy />
-      </div>
-    </section>
+    <NavLink
+      to={props.linkTo}
+      className={({ isActive }) => {
+        return ` flex font-medium px-8 py-4 rounded-md hover:bg-[#d9f9e3] hover:text-[#01b741] ${isActive ? "text-[#01b741] bg-[#d9f9e3]" : ""}`;
+      }}
+    >
+      {props.linkLabel}
+    </NavLink>
   );
 };
 
-const DashboardHeader = () => {
-  const fetcher = useFetcher();
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
+export function FluentShiftsActivity24Filled(props: SVGProps<SVGSVGElement>) {
   return (
-    <section>
-      <header>dash header</header>
-      <main className="outline outline-1 flex justify-between">
-        <span>dash header content</span>
-        <div className="flex gap-10">
-          <button onClick={() => dialogRef.current?.showModal()}>
-            new income
-          </button>
-          <dialog ref={dialogRef} className="pb-10">
-            <fetcher.Form className="flex flex-col" method="POST" action="/">
-              <section className="px-10 pt-10">
-                <header className="flex justify-between pb-10">
-                  <span>Create a new income transaction</span>
-                  <button onClick={() => dialogRef.current?.close()}>x</button>
-                </header>
-                <main className="pb-10 flex flex-col">
-                  <label htmlFor="">Description</label>
-                  <input type="text" name="description" />
-
-                  <label htmlFor="">Amount</label>
-                  <input type="number" name="amount" placeholder="0" />
-
-                  <label htmlFor="">Category</label>
-                  <select name="category" id="">
-                    <option value="">select an option</option>
-                    <option value="salary">salary</option>
-                    <option value="investments">investments</option>
-                  </select>
-
-                  <label htmlFor="">Transaction date</label>
-                  <input type="date" name="date" />
-                </main>
-              </section>
-              <footer className="flex justify-end pr-10 gap-10">
-                <button type="submit">
-                  {fetcher.state != "idle" ? "creating" : "create"}
-                </button>
-              </footer>
-            </fetcher.Form>
-          </dialog>
-          <button>new expense</button>
-        </div>
-      </main>
-    </section>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      {/* Icon from Fluent UI System Icons by Microsoft Corporation - https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE */}
+      <path
+        fill="currentColor"
+        d="M11.11 4.049a1 1 0 1 0-.22-1.988C5.888 2.614 2 6.852 2 12c0 5.523 4.477 10 10 10c5.146 0 9.383-3.887 9.939-8.885a1 1 0 0 0-1.988-.221A8.001 8.001 0 0 1 4 12a8 8 0 0 1 7.11-7.951m3.657-1.658a1 1 0 0 0-.54 1.925q.432.122.842.29a1 1 0 0 0 .757-1.852a10 10 0 0 0-1.059-.363m2.582 2.3a1 1 0 0 1 1.413-.06q.318.291.609.608a1 1 0 0 1-1.474 1.352a8 8 0 0 0-.486-.486a1 1 0 0 1-.062-1.413M11 6a1 1 0 0 1 1 1v5h3a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1m8.94 1.623a1 1 0 0 1 1.304.547a10 10 0 0 1 .365 1.063a1 1 0 1 1-1.925.54a8 8 0 0 0-.291-.846a1 1 0 0 1 .546-1.304"
+      />
+    </svg>
   );
-};
-
-const DashboardOverview = () => {
-  const transactions = useLoaderData();
-  console.log("transactions", transactions);
-
-  return (
-    <>
-      <section>
-        <header>dash overview</header>
-        <main className="outline outline-1">
-          <span>dash overview content</span>
-        </main>
-        <ul>
-          {transactions.map((transaction: transaction) => (
-            <li className="flex gap-10">
-              <span>{transaction.description}</span>
-              <span>{transaction.amount}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </>
-  );
-};
-
-const DashboardHistoy = () => {
-  return (
-    <section>
-      <header>dash history</header>
-      <main className="outline outline-1">dash history content</main>
-    </section>
-  );
-};
+}
