@@ -39,9 +39,17 @@ export const Dashboard = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <section className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full">
-      <div className="bg-white px-16 py-16 rounded-2xl h-full">
-        <section>
+    <div className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full flex flex-col gap-16">
+      <section className="bg-white px-16 py-16 rounded-2xl">
+        <main>
+          <ul className="flex gap-10">
+            <DashboardChipItem label="Dollar" price={100} />
+            <DashboardChipItem label="Euro" price={92} />
+          </ul>
+        </main>
+      </section>
+      <section className="bg-white px-16 py-16 rounded-2xl h-full">
+        <div>
           <header className="flex gap-10 justify-between pb-10">
             <div>Search</div>
             <div className="flex gap-10">
@@ -118,8 +126,18 @@ export const Dashboard = () => {
               ))}
             </ul>
           </footer>
-        </section>
-      </div>
-    </section>
+        </div>
+      </section>
+    </div>
   );
 };
+
+function DashboardChipItem(props: { label: string; price: number }) {
+  return (
+    <li className="outline outline-[0.5px] outline-gray-300 rounded-md p-6">
+      <header>{props.label}</header>
+      <main>{props.price}</main>
+      <footer></footer>
+    </li>
+  );
+}
