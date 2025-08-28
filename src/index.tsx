@@ -3,11 +3,11 @@ import { Link, useFetcher, useLoaderData } from "react-router";
 import { pb } from "./main";
 
 export async function indexLoader() {
-  const transactions = await pb.collection('transactions').getFullList()
-  return transactions
+  const transactions = await pb.collection("transactions").getFullList();
+  return transactions;
 }
 
-export type transaction = {
+export type Transaction = {
   id: string;
   date: string;
   description: string;
@@ -24,13 +24,15 @@ export async function indexAction({ request }: { request: Request }) {
     description: description,
     amount: Number(amount),
   };
-  const transactionRecord = await pb.collection('transactions').create(newTransaction)
+  const transactionRecord = await pb
+    .collection("transactions")
+    .create(newTransaction);
   return transactionRecord;
 }
 
 export const Dashboard = () => {
   const transactions = useLoaderData();
-  console.log('transactions', transactions);
+  console.log("transactions", transactions);
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -105,23 +107,25 @@ export const Dashboard = () => {
               <li className="font-medium">Date</li>
               <li className="font-medium">Amount</li>
             </ul>
-            <ul>
-             {/* <div> {JSON.stringify(transactions) }</div> */}
-              {transactions.map((transaction: transaction) => (
-                <li key={transaction.id} className="flex gap-10">
-                  <Link
-                    to={transaction.id}
-                    className={`w-full justify-between flex font-medium px-8 py-4 rounded-md hover:bg-[#d9f9e3] hover:text-[#01b741] `}
-                  >
-                    <span>{transaction.description}</span>
-                    <span>
-                      {new Date(transaction.date).toLocaleDateString()}
-                    </span>
-                    <span>${transaction.amount}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+
+            {/* <div> {JSON.stringify(transactions) }</div> */}
+            {transactions.map((transaction: Transaction) => (
+              <Link to={transaction.id} key={transaction.id}>
+                <TransactionItem transaction={transaction} />
+              </Link>
+              // <li key={transaction.id} className="flex gap-10">
+              //   <Link
+              //     to={transaction.id}
+              //     className={`w-full justify-between flex font-medium px-8 py-4 rounded-md hover:bg-[#d9f9e3] hover:text-[#01b741] `}
+              //   >
+              //     <span>{transaction.description}</span>
+              //     <span className="text-[#6e6e6e]">
+              //       {new Date(transaction.date).toLocaleDateString()}
+              //     </span>
+              //     <span>${transaction.amount}</span>
+              //   </Link>
+              // </li>
+            ))}
           </footer>
         </div>
       </section>
@@ -136,5 +140,17 @@ function DashboardChipItem(props: { label: string; price: number }) {
       <main>{props.price}</main>
       <footer></footer>
     </li>
+  );
+}
+
+export function TransactionItem(props: { transaction: Transaction }) {
+  return (
+    <section className="bg-white rounded-md  gap-10 font-medium flex justify-between">
+      <span>{props.transaction.description}</span>
+      <span className="text-[#6e6e6e]">
+        {new Date(props.transaction.date).toLocaleDateString()}
+      </span>
+      <span>${props.transaction.amount}</span>
+    </section>
   );
 }

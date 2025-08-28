@@ -7,8 +7,8 @@ import {
 } from "react-router";
 import { App } from "./App.tsx";
 import {
-  TransactionItem,
   TransactionItemLoader,
+  TransactionItemPage,
 } from "./pages/transaction-item/ui/TransactionItem.tsx";
 import "./index.css";
 import { Dashboard, indexAction, indexLoader } from "./index.tsx";
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/:transactionId",
-        element: <TransactionItem />,
+        element: <TransactionItemPage />,
         loader: TransactionItemLoader,
       },
     ],
