@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --watch",
+    "dev": "node --watch server.ts"
+  },
+  "dependencies": {
+    "@orpc/openapi": "^1.8.0",
+    "@orpc/server": "^1.8.0",
+    "@orpc/zod": "^1.8.0",
+    "@prisma/client": "^6.14.0",
+    "@prisma/extension-accelerate": "^2.0.2",
+    "prisma": "^6.14.0",
+    "zod": "^4.0.17"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "typescript": "^5.9.2"
+  }
+}
