@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { Link, useFetcher, useLoaderData } from "react-router";
+import { pb } from "./main";
 
 export async function indexLoader() {
-  const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-  return transactions;
+  const transactions = await pb.collection('transactions').getFullList()
+  return transactions
 }
 
 export type transaction = {
@@ -18,23 +19,18 @@ export async function indexAction({ request }: { request: Request }) {
   const amount = formData.get("amount");
   console.log("Action received data:", { description, amount });
 
-  const existing_transanctions = JSON.parse(
-    localStorage.getItem("transactions") || "[]",
-  );
-  const new_transaction = {
-    id: crypto.randomUUID(),
+  const newTransaction = {
     date: new Date(),
     description: description,
     amount: Number(amount),
   };
-  const updated_transactions = [...existing_transanctions, new_transaction];
-  localStorage.setItem("transactions", JSON.stringify(updated_transactions));
-  return updated_transactions;
+  const transactionRecord = await pb.collection('transactions').create(newTransaction)
+  return transactionRecord;
 }
 
 export const Dashboard = () => {
   const transactions = useLoaderData();
-  console.log("transactions", transactions);
+  console.log('transactions', transactions);
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -110,6 +106,7 @@ export const Dashboard = () => {
               <li className="font-medium">Amount</li>
             </ul>
             <ul>
+             {/* <div> {JSON.stringify(transactions) }</div> */}
               {transactions.map((transaction: transaction) => (
                 <li key={transaction.id} className="flex gap-10">
                   <Link
