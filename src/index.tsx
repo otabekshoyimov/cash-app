@@ -1,6 +1,29 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { Link, useFetcher, useLoaderData } from "react-router";
+import * as echarts from "echarts/core";
+import { BarChart } from "echarts/charts";
+import {
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  DatasetComponent,
+  TransformComponent,
+} from "echarts/components";
+import { LabelLayout, UniversalTransition } from "echarts/features";
+import { SVGRenderer } from "echarts/renderers";
 import { pb } from "./main";
+
+echarts.use([
+  BarChart,
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  DatasetComponent,
+  TransformComponent,
+  LabelLayout,
+  UniversalTransition,
+  SVGRenderer,
+]);
 
 export async function indexLoader() {
   const transactions = await pb.collection("transactions").getFullList();
@@ -35,6 +58,7 @@ export const Dashboard = () => {
   console.log("transactions", transactions);
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const chartSectionRef = useRef<HTMLElement>(null);
 
   return (
     <div className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full flex flex-col gap-16">
@@ -129,6 +153,7 @@ export const Dashboard = () => {
           </footer>
         </div>
       </section>
+      <ChartItem chartSectionRef={chartSectionRef} />
     </div>
   );
 };
@@ -151,6 +176,105 @@ export function TransactionItem(props: { transaction: Transaction }) {
         {new Date(props.transaction.date).toLocaleDateString()}
       </span>
       <span>${props.transaction.amount}</span>
+    </section>
+  );
+}
+
+function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
+  const transactions = useLoaderData() as Transaction[];
+
+  const monthsNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const month = new Date().getMonth();
+    return monthsNames[month];
+  });
+  console.log(currentMonth);
+
+  const [currentYear, setCurrentYear] = useState(() => {
+    const year = new Date().getFullYear();
+    return year;
+  });
+
+  function getDaysInMonth() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    return daysInMonth;
+  }
+
+  const amountsByDay = Array.from({ length: getDaysInMonth() }, () => 0);
+  transactions.forEach((transaction) => {
+    const date = new Date(transaction.date);
+    const day = date.getDate();
+    amountsByDay[day - 1] = amountsByDay[day - 1] + transaction.amount;
+  });
+  useEffect(() => {
+    if (!props.chartSectionRef) {
+      console.error("err");
+      return;
+    }
+    const myChart = echarts.init(props.chartSectionRef.current);
+
+    myChart.setOption({
+      title: {
+        text: "",
+      },
+      tooltip: {},
+      xAxis: {
+        data: Array.from({ length: getDaysInMonth() }, (_, i: number) => i + 1),
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "transactions",
+          type: "bar",
+          data: amountsByDay,
+        },
+      ],
+    });
+    return () => {
+      myChart.dispose();
+    };
+  }, [props.chartSectionRef]);
+
+  return (
+    <section>
+      <header className="flex gap-8">
+        <div className="flex gap-8">
+          <form action="" className="flex">
+            <input type="text" value={"month"} />
+            <input type="text" value={"year"} />
+          </form>
+          <form action="" className="flex">
+            <input type="text" value={currentMonth} />
+            <input type="text" value={currentYear} />
+          </form>
+        </div>
+
+        <div className="flex gap-8">
+          <span>income</span>
+          <span>expense</span>
+        </div>
+      </header>
+      <main
+        ref={props.chartSectionRef}
+        style={{ width: "600px", height: "400px" }}
+      ></main>
     </section>
   );
 }
