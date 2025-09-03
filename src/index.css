@@ -41,6 +41,11 @@ ul {
 button {
   font: inherit;
 }
+select, option {
+  font: inherit;
+}
+
+
 
 form {
   font-size: inherit;
@@ -57,4 +62,41 @@ dialog {
   padding: 0;
   margin: auto;
   border-radius: 10px;
+}
+
+.react-aria-ToggleButtonGroup {
+  display: flex;
+
+  > button {
+    border-radius: 0;
+    z-index: 1;
+    border: none;
+
+
+    &[data-disabled] {
+      z-index: 0;
+    }
+
+    &[data-selected],
+    &[data-focus-visible] {
+      z-index: 2;
+    }
+  }
+}
+
+.react-aria-ToggleButtonGroup[data-orientation=horizontal] {
+  flex-direction: row;
+
+  > button {
+    margin-inline-start: -1px;
+    
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+      margin-inline-start: 0;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  }
 }

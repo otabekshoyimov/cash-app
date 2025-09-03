@@ -1,16 +1,28 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
-import { Link, useFetcher, useLoaderData } from "react-router";
-import * as echarts from "echarts/core";
 import { BarChart } from "echarts/charts";
 import {
+  DatasetComponent,
+  GridComponent,
   TitleComponent,
   TooltipComponent,
-  GridComponent,
-  DatasetComponent,
   TransformComponent,
 } from "echarts/components";
+import * as echarts from "echarts/core";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
+import { ChevronDown } from "lucide-react";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import type { Key } from "react-aria-components";
+import {
+  Button,
+  ListBox,
+  ListBoxItem,
+  Popover,
+  Select,
+  SelectValue,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "react-aria-components";
+import { Link, useFetcher, useLoaderData } from "react-router";
 import { pb } from "./main";
 
 echarts.use([
@@ -55,7 +67,6 @@ export async function indexAction({ request }: { request: Request }) {
 
 export const Dashboard = () => {
   const transactions = useLoaderData();
-  console.log("transactions", transactions);
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
@@ -198,72 +209,222 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
     "December",
   ];
 
+  const years = [2022, 2023, 2024, 2025];
+
   const [currentMonth, setCurrentMonth] = useState(() => {
     const month = new Date().getMonth();
     return monthsNames[month];
   });
-  console.log(currentMonth);
 
   const [currentYear, setCurrentYear] = useState(() => {
     const year = new Date().getFullYear();
     return year;
   });
 
-  function getDaysInMonth() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const [selectedActiveChartTab, setSelectedActiveChartTab] = useState<
+    Set<Key>
+  >(new Set(["month"]));
+
+  function getDaysInMonth(currentMonth: string) {
+    const year = new Date().getFullYear();
+    const monthName = monthsNames.indexOf(currentMonth);
+    const daysInMonth = new Date(year, monthName + 1, 0).getDate();
     return daysInMonth;
   }
 
-  const amountsByDay = Array.from({ length: getDaysInMonth() }, () => 0);
-  transactions.forEach((transaction) => {
-    const date = new Date(transaction.date);
-    const day = date.getDate();
-    amountsByDay[day - 1] = amountsByDay[day - 1] + transaction.amount;
-  });
+  function getTransactionsByDay(
+    transactions: Transaction[],
+    currentMonth: string,
+  ) {
+    let daysInMonth = Array.from(
+      { length: getDaysInMonth(currentMonth) },
+      () => 0,
+    );
+    transactions.forEach((transaction) => {
+      const day = new Date(transaction.date).getDate();
+      daysInMonth[day - 1] = daysInMonth[day - 1] + transaction.amount;
+    });
+    return daysInMonth;
+  }
+  function getTransactionsByMonth(filteredTransactions: Transaction[]) {
+    let months = Array.from({ length: 12 }, () => 0);
+    filteredTransactions.forEach((transaction) => {
+      const month = new Date(transaction.date).getMonth();
+      months[month] = months[month] + transaction.amount;
+    });
+    return months;
+  }
+  function filterTransactionsBytMonth(
+    transactions: Transaction[],
+    currentMonth: string,
+    currentYear: number,
+  ) {
+    return transactions.filter((transaction) => {
+      const date = new Date(transaction.date);
+      const monthIndex = date.getMonth();
+      const monthName = monthsNames[monthIndex];
+      const year = date.getFullYear();
+      return monthName === currentMonth && year === currentYear;
+    });
+  }
+  function filterTransactionsByYear(
+    transactions: Transaction[],
+    currentYear: number,
+  ) {
+    return transactions.filter((transaction) => {
+      const year = new Date(transaction.date).getFullYear();
+      return year === currentYear;
+    });
+  }
+
+  let chartRef = useRef<echarts.ECharts | null>(null);
+
   useEffect(() => {
     if (!props.chartSectionRef) {
       console.error("err");
       return;
     }
-    const myChart = echarts.init(props.chartSectionRef.current);
+    chartRef.current = echarts.init(props.chartSectionRef.current);
 
-    myChart.setOption({
-      title: {
-        text: "",
-      },
-      tooltip: {},
-      xAxis: {
-        data: Array.from({ length: getDaysInMonth() }, (_, i: number) => i + 1),
-      },
-      yAxis: {},
-      series: [
-        {
-          name: "transactions",
-          type: "bar",
-          data: amountsByDay,
-        },
-      ],
-    });
     return () => {
-      myChart.dispose();
+      chartRef.current?.dispose();
     };
   }, [props.chartSectionRef]);
 
+  useEffect(() => {
+    if (!chartRef.current) {
+      console.error("err");
+      return;
+    }
+    if (selectedActiveChartTab.has("month")) {
+      const filteredTransactions = filterTransactionsBytMonth(
+        transactions,
+        currentMonth,
+        currentYear,
+      );
+      return chartRef.current.setOption({
+        title: {
+          text: `${currentMonth} activity graph`,
+        },
+        tooltip: {},
+        xAxis: {
+          data: Array.from(
+            { length: getDaysInMonth(currentMonth) },
+            (_, i: number) => i + 1,
+          ),
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "transactions",
+            type: "bar",
+            data: getTransactionsByDay(filteredTransactions, currentMonth),
+          },
+        ],
+      });
+    }
+    if (selectedActiveChartTab.has("year")) {
+      const filteredTransactions = filterTransactionsByYear(
+        transactions,
+        currentYear,
+      );
+      return chartRef.current.setOption({
+        title: {
+          text: `${currentYear} graph`,
+        },
+        tooltip: {},
+        xAxis: {
+          data: monthsNames,
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "transactions",
+            type: "bar",
+            data: getTransactionsByMonth(filteredTransactions),
+          },
+        ],
+      });
+    }
+  }, [selectedActiveChartTab, currentMonth, currentYear, transactions]);
+  console.log("currentMonth", currentMonth);
+
   return (
     <section>
-      <header className="flex gap-8">
+      <header className="flex gap-8 justify-between text-base">
         <div className="flex gap-8">
-          <form action="" className="flex">
-            <input type="text" value={"month"} />
-            <input type="text" value={"year"} />
-          </form>
-          <form action="" className="flex">
-            <input type="text" value={currentMonth} />
-            <input type="text" value={currentYear} />
-          </form>
+          <ToggleButtonGroup
+            selectionMode="single"
+            selectedKeys={selectedActiveChartTab}
+            className={"bg-white px-4 py-2 rounded-md"}
+            onSelectionChange={(key) => {
+              setSelectedActiveChartTab(key);
+            }}
+          >
+            <ToggleButton
+              id={"month"}
+              className={({ isSelected }) =>
+                `px-4 border-none rounded-md ${isSelected ? "bg-gray-300 shadow-md" : "bg-white "} `
+              }
+            >
+              Month
+            </ToggleButton>
+            <ToggleButton
+              id={"year"}
+              className={({ isSelected }) =>
+                `border-none px-4 rounded-md ${isSelected ? "bg-gray-300 shadow-md" : "bg-white"}`
+              }
+            >
+              Year
+            </ToggleButton>
+          </ToggleButtonGroup>
+          <Select
+            name="month"
+            selectedKey={currentMonth}
+            onSelectionChange={(selected) => {
+              setCurrentMonth(String(selected));
+            }}
+          >
+            <Button className="flex items-center gap-4 px-4 py-2">
+              <SelectValue />
+              <span aria-hidden="true">
+                <ChevronDown size={16} className="pt-4" />
+              </span>
+            </Button>
+            <Popover>
+              <ListBox className={"bg-white px-8 py-4 rounded-md"}>
+                {monthsNames.map((month) => (
+                  <ListBoxItem id={month} key={month}>
+                    {month}
+                  </ListBoxItem>
+                ))}
+              </ListBox>
+            </Popover>
+          </Select>
+
+          <Select
+            name="year"
+            selectedKey={currentYear}
+            onSelectionChange={(selected) => {
+              setCurrentMonth(String(selected));
+            }}
+          >
+            <Button className="flex items-center gap-4 px-4 py-2">
+              <SelectValue />
+              <span aria-hidden="true">
+                <ChevronDown size={16} className="pt-4" />
+              </span>
+            </Button>
+            <Popover>
+              <ListBox className={"bg-white px-8 py-4 rounded-md"}>
+                {years.map((year) => (
+                  <ListBoxItem id={year} key={year}>
+                    {year}
+                  </ListBoxItem>
+                ))}
+              </ListBox>
+            </Popover>
+          </Select>
         </div>
 
         <div className="flex gap-8">
@@ -273,7 +434,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       </header>
       <main
         ref={props.chartSectionRef}
-        style={{ width: "600px", height: "400px" }}
+        style={{ width: "600px", height: "360px" }}
       ></main>
     </section>
   );
