@@ -39,7 +39,8 @@ echarts.use([
 
 export async function indexLoader() {
   const transactions = await pb.collection("transactions").getFullList();
-  const res = await fetch("http://localhost:3001/rates");
+  const BASE_URL = "cash-app-production-aa3d.up.railway.app";
+  const res = await fetch(`${BASE_URL}/rates`);
   const rates = await res.json();
   console.log("server rates", rates);
   return [transactions, rates];
