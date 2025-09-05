@@ -11,7 +11,11 @@ import {
   TransactionItemPage,
 } from "./pages/transaction-item/ui/TransactionItem.tsx";
 import "./index.css";
-import { Dashboard, indexAction, indexLoader } from "./index.tsx";
+import {
+  Dashboard,
+  indexAction,
+  indexLoader,
+} from "./pages/index/ui/index.tsx";
 
 import PocketBase from "pocketbase";
 

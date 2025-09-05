@@ -23,8 +23,8 @@ import {
   ToggleButtonGroup,
 } from "react-aria-components";
 import { Link, useFetcher, useLoaderData } from "react-router";
-import { pb } from "./main";
-import { runtimeEnv } from "./env";
+import { pb } from "../../../main";
+import { runtimeEnv } from "../../../env";
 
 echarts.use([
   BarChart,
