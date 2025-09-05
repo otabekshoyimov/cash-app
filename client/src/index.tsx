@@ -9,7 +9,7 @@ import {
 import * as echarts from "echarts/core";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
-import { ChevronDown, Space } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import type { Key } from "react-aria-components";
 import {
