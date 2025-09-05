@@ -216,7 +216,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
     return monthsNames[month];
   });
 
-  const [currentYear, setCurrentYear] = useState(() => {
+  const [currentYear] = useState(() => {
     const year = new Date().getFullYear();
     return year;
   });
