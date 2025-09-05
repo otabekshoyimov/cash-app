@@ -9,7 +9,7 @@ import {
 import * as echarts from "echarts/core";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Space } from "lucide-react";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import type { Key } from "react-aria-components";
 import {
@@ -39,7 +39,10 @@ echarts.use([
 
 export async function indexLoader() {
   const transactions = await pb.collection("transactions").getFullList();
-  return transactions;
+  const res = await fetch("http://localhost:3001/rates");
+  const rates = await res.json();
+  console.log("server rates", rates);
+  return [transactions, rates];
 }
 
 export type Transaction = {
@@ -65,8 +68,17 @@ export async function indexAction({ request }: { request: Request }) {
   return transactionRecord;
 }
 
+type RateResponse = {
+  amount: number;
+  base: string;
+  rates: Record<string, number>;
+};
+
+type LoaderData = [Transaction[], RateResponse];
+
 export const Dashboard = () => {
-  const transactions = useLoaderData();
+  const [transactions, rates] = useLoaderData() as LoaderData;
+  console.log(rates);
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
@@ -76,8 +88,9 @@ export const Dashboard = () => {
       <section className="bg-white px-16 py-16 rounded-2xl">
         <main>
           <ul className="flex gap-10">
-            <DashboardChipItem label="Dollar" price={100} />
-            <DashboardChipItem label="Euro" price={92} />
+            {Object.entries(rates.rates).map(([key, value]) => (
+              <DashboardChipItem key={key} currency={key} value={value} />
+            ))}
           </ul>
         </main>
       </section>
@@ -169,11 +182,16 @@ export const Dashboard = () => {
   );
 };
 
-function DashboardChipItem(props: { label: string; price: number }) {
+function DashboardChipItem(props: { currency: string; value: number }) {
   return (
-    <li className="outline outline-[0.5px] outline-gray-300 rounded-md p-6">
-      <header>{props.label}</header>
-      <main>{props.price}</main>
+    <li className="outline outline-[0.5px] outline-gray-300 rounded-md px-8">
+      <header>{props.currency}</header>
+      <main className="text-2xl font-medium">
+        {props.currency === "USD" && <span>$</span>}
+        {props.currency === "EUR" && <span>€</span>}
+
+        {props.value.toFixed(2)}
+      </main>
       <footer></footer>
     </li>
   );
@@ -192,7 +210,7 @@ export function TransactionItem(props: { transaction: Transaction }) {
 }
 
 function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
-  const transactions = useLoaderData() as Transaction[];
+  const [transactions] = useLoaderData();
 
   const monthsNames = [
     "January",
