@@ -24,6 +24,7 @@ import {
 } from "react-aria-components";
 import { Link, useFetcher, useLoaderData } from "react-router";
 import { pb } from "./main";
+import { runtimeEnv } from "./env";
 
 echarts.use([
   BarChart,
@@ -39,10 +40,9 @@ echarts.use([
 
 export async function indexLoader() {
   const transactions = await pb.collection("transactions").getFullList();
-  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+  const BASE_URL = runtimeEnv.BACKEND_URL;
   const res = await fetch(`${BASE_URL}/rates`);
   const rates = await res.json();
-  console.log("server rates", rates);
   return [transactions, rates];
 }
 
@@ -79,7 +79,6 @@ type LoaderData = [Transaction[], RateResponse];
 
 export const Dashboard = () => {
   const [transactions, rates] = useLoaderData() as LoaderData;
-  console.log(rates);
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
@@ -366,7 +365,6 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       });
     }
   }, [selectedActiveChartTab, currentMonth, currentYear, transactions]);
-  console.log("currentMonth", currentMonth);
 
   return (
     <section>
