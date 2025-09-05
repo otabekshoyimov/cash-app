@@ -5,7 +5,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://cash-app-7ig.pages.dev"],
+    origin: ["http://localhost:5173", "https://cashapp.otabekshoyimov.com"],
   })
 );
 
