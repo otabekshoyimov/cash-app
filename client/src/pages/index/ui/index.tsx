@@ -23,8 +23,9 @@ import {
   ToggleButtonGroup,
 } from "react-aria-components";
 import { Link, useFetcher, useLoaderData } from "react-router";
-import { pb } from "../../../main";
+
 import { runtimeEnv } from "../../../env";
+import { pb } from "../../../shared/api/pocketbase";
 
 echarts.use([
   BarChart,
@@ -48,24 +49,27 @@ export async function indexLoader() {
 
 export type Transaction = {
   id: string;
+  type: string;
   date: string;
   description: string;
   amount: number;
 };
 export async function indexAction({ request }: { request: Request }) {
   const formData = await request.formData();
+  const type = formData.get("type");
   const description = formData.get("description");
   const amount = formData.get("amount");
-  console.log("Action received data:", { description, amount });
 
   const newTransaction = {
     date: new Date(),
+    type: type,
     description: description,
     amount: Number(amount),
   };
   const transactionRecord = await pb
     .collection("transactions")
     .create(newTransaction);
+  console.log("t record", transactionRecord);
   return transactionRecord;
 }
 
@@ -79,9 +83,13 @@ type LoaderData = [Transaction[], RateResponse];
 
 export const Dashboard = () => {
   const [transactions, rates] = useLoaderData() as LoaderData;
+  const [transactionType, setTransactionType] = useState<"income" | "expense">(
+    "income",
+  );
   const fetcher = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
+  const transactionTypeInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full flex flex-col gap-16">
@@ -101,11 +109,22 @@ export const Dashboard = () => {
             <div className="flex gap-10">
               <button
                 className="px-4"
-                onClick={() => dialogRef.current?.showModal()}
+                onClick={() => {
+                  setTransactionType("income");
+                  dialogRef.current?.showModal();
+                }}
               >
                 New income
               </button>
-              <button className="px-4">New expense</button>
+              <button
+                className="px-4"
+                onClick={() => {
+                  setTransactionType("expense");
+                  dialogRef.current?.showModal();
+                }}
+              >
+                New expense
+              </button>
             </div>
           </header>
           <main className="outline outline-[0.5px] outline-gray-200 flex justify-between">
@@ -129,15 +148,12 @@ export const Dashboard = () => {
                       <label htmlFor="">Amount</label>
                       <input type="number" name="amount" placeholder="0" />
 
-                      <label htmlFor="">Category</label>
-                      <select name="category" id="">
-                        <option value="">select an option</option>
-                        <option value="salary">salary</option>
-                        <option value="investments">investments</option>
-                      </select>
-
-                      <label htmlFor="">Transaction date</label>
-                      <input type="date" name="date" />
+                      <input
+                        ref={transactionTypeInputRef}
+                        type="hidden"
+                        name="type"
+                        value={transactionType}
+                      />
                     </main>
                   </section>
                   <footer className="flex justify-end pr-10 gap-10">
@@ -155,24 +171,10 @@ export const Dashboard = () => {
               <li className="font-medium">Date</li>
               <li className="font-medium">Amount</li>
             </ul>
-
-            {/* <div> {JSON.stringify(transactions) }</div> */}
             {transactions.map((transaction: Transaction) => (
               <Link to={transaction.id} key={transaction.id}>
                 <TransactionItem transaction={transaction} />
               </Link>
-              // <li key={transaction.id} className="flex gap-10">
-              //   <Link
-              //     to={transaction.id}
-              //     className={`w-full justify-between flex font-medium px-8 py-4 rounded-md hover:bg-[#d9f9e3] hover:text-[#01b741] `}
-              //   >
-              //     <span>{transaction.description}</span>
-              //     <span className="text-[#6e6e6e]">
-              //       {new Date(transaction.date).toLocaleDateString()}
-              //     </span>
-              //     <span>${transaction.amount}</span>
-              //   </Link>
-              // </li>
             ))}
           </footer>
         </div>
@@ -204,30 +206,34 @@ export function TransactionItem(props: { transaction: Transaction }) {
       <span className="text-[#6e6e6e]">
         {new Date(props.transaction.date).toLocaleDateString()}
       </span>
-      <span>${props.transaction.amount}</span>
+      <span
+        className={`${props.transaction.type === "income" ? "text-green-600" : "text-red-600"}`}
+      >
+        ${props.transaction.amount}
+      </span>
     </section>
   );
 }
 
+const monthsNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const years = [2022, 2023, 2024, 2025];
+
 function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
   const [transactions] = useLoaderData();
-
-  const monthsNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const years = [2022, 2023, 2024, 2025];
+  console.log("t", transactions);
 
   const [currentMonth, setCurrentMonth] = useState(() => {
     const month = new Date().getMonth();
@@ -242,58 +248,6 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
   const [selectedActiveChartTab, setSelectedActiveChartTab] = useState<
     Set<Key>
   >(new Set(["month"]));
-
-  function getDaysInMonth(currentMonth: string) {
-    const year = new Date().getFullYear();
-    const monthName = monthsNames.indexOf(currentMonth);
-    const daysInMonth = new Date(year, monthName + 1, 0).getDate();
-    return daysInMonth;
-  }
-
-  function getTransactionsByDay(
-    transactions: Transaction[],
-    currentMonth: string,
-  ) {
-    let daysInMonth = Array.from(
-      { length: getDaysInMonth(currentMonth) },
-      () => 0,
-    );
-    transactions.forEach((transaction) => {
-      const day = new Date(transaction.date).getDate();
-      daysInMonth[day - 1] = daysInMonth[day - 1] + transaction.amount;
-    });
-    return daysInMonth;
-  }
-  function getTransactionsByMonth(filteredTransactions: Transaction[]) {
-    let months = Array.from({ length: 12 }, () => 0);
-    filteredTransactions.forEach((transaction) => {
-      const month = new Date(transaction.date).getMonth();
-      months[month] = months[month] + transaction.amount;
-    });
-    return months;
-  }
-  function filterTransactionsBytMonth(
-    transactions: Transaction[],
-    currentMonth: string,
-    currentYear: number,
-  ) {
-    return transactions.filter((transaction) => {
-      const date = new Date(transaction.date);
-      const monthIndex = date.getMonth();
-      const monthName = monthsNames[monthIndex];
-      const year = date.getFullYear();
-      return monthName === currentMonth && year === currentYear;
-    });
-  }
-  function filterTransactionsByYear(
-    transactions: Transaction[],
-    currentYear: number,
-  ) {
-    return transactions.filter((transaction) => {
-      const year = new Date(transaction.date).getFullYear();
-      return year === currentYear;
-    });
-  }
 
   let chartRef = useRef<echarts.ECharts | null>(null);
 
@@ -315,7 +269,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       return;
     }
     if (selectedActiveChartTab.has("month")) {
-      const filteredTransactions = filterTransactionsBytMonth(
+      const filteredTransactions = filterTransactionsByMonth(
         transactions,
         currentMonth,
         currentYear,
@@ -334,9 +288,28 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
         yAxis: {},
         series: [
           {
-            name: "transactions",
+            name: "Income",
             type: "bar",
-            data: getTransactionsByDay(filteredTransactions, currentMonth),
+            data: getIncomeTransactionsByDay(
+              filteredTransactions,
+              currentMonth,
+            ),
+            itemStyle: {
+              color: "#01b741",
+              borderRadius: 6,
+            },
+          },
+          {
+            name: "Expense",
+            type: "bar",
+            data: getExpenseTransactionsByDay(
+              filteredTransactions,
+              currentMonth,
+            ),
+            itemStyle: {
+              color: "red",
+              borderRadius: 6,
+            },
           },
         ],
       });
@@ -346,6 +319,15 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
         transactions,
         currentYear,
       );
+      console.log(
+        "Income:",
+        getIncomeTransactionsByMonth(filteredTransactions),
+      );
+      console.log(
+        "Expense:",
+        getExpenseTransactionsByMonth(filteredTransactions),
+      );
+
       return chartRef.current.setOption({
         title: {
           text: `${currentYear} graph`,
@@ -357,9 +339,22 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
         yAxis: {},
         series: [
           {
-            name: "transactions",
+            name: "Income",
             type: "bar",
-            data: getTransactionsByMonth(filteredTransactions),
+            data: getIncomeTransactionsByMonth(filteredTransactions),
+            itemStyle: {
+              color: "#01b741",
+              borderRadius: 6,
+            },
+          },
+          {
+            name: "Expense",
+            type: "bar",
+            data: getExpenseTransactionsByMonth(filteredTransactions),
+            itemStyle: {
+              color: "red",
+              borderRadius: 6,
+            },
           },
         ],
       });
@@ -445,8 +440,14 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
         </div>
 
         <div className="flex gap-8">
-          <span>income</span>
-          <span>expense</span>
+          <span className="flex items-center gap-6">
+            <div className="w-14 h-14 bg-green-600 rounded-lg"></div>
+            income
+          </span>
+          <span className="flex items-center gap-6">
+            <div className="w-14 h-14 bg-red-600 rounded-lg"></div>
+            expense
+          </span>
         </div>
       </header>
       <main
@@ -455,4 +456,88 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       ></main>
     </section>
   );
+}
+
+function getDaysInMonth(currentMonth: string) {
+  const year = new Date().getFullYear();
+  const monthName = monthsNames.indexOf(currentMonth);
+  const daysInMonth = new Date(year, monthName + 1, 0).getDate();
+  return daysInMonth;
+}
+
+function getIncomeTransactionsByDay(
+  transactions: Transaction[],
+  currentMonth: string,
+) {
+  let daysInMonth = Array.from(
+    { length: getDaysInMonth(currentMonth) },
+    () => 0,
+  );
+  transactions.forEach((transaction) => {
+    if (transaction.type === "income") {
+      const day = new Date(transaction.date).getDate();
+      daysInMonth[day - 1] = daysInMonth[day - 1] + transaction.amount;
+    }
+  });
+  return daysInMonth;
+}
+function getExpenseTransactionsByDay(
+  transactions: Transaction[],
+  currentMonth: string,
+) {
+  let daysInMonth = Array.from(
+    { length: getDaysInMonth(currentMonth) },
+    () => 0,
+  );
+  transactions.forEach((transaction) => {
+    if (transaction.type === "expense") {
+      const day = new Date(transaction.date).getDate();
+      daysInMonth[day - 1] = daysInMonth[day - 1] + transaction.amount;
+    }
+  });
+  return daysInMonth;
+}
+function getIncomeTransactionsByMonth(filteredTransactions: Transaction[]) {
+  let months = Array.from({ length: 12 }, () => 0);
+  filteredTransactions.forEach((transaction) => {
+    if (transaction.type === "income") {
+      const month = new Date(transaction.date).getMonth();
+      months[month] = months[month] + transaction.amount;
+    }
+  });
+  return months;
+}
+
+function getExpenseTransactionsByMonth(filteredTransactions: Transaction[]) {
+  let months = Array.from({ length: 12 }, () => 0);
+  filteredTransactions.forEach((transaction) => {
+    if (transaction.type === "expense") {
+      const month = new Date(transaction.date).getMonth();
+      months[month] = months[month] + transaction.amount;
+    }
+  });
+
+  return months;
+}
+function filterTransactionsByMonth(
+  transactions: Transaction[],
+  currentMonth: string,
+  currentYear: number,
+) {
+  return transactions.filter((transaction) => {
+    const date = new Date(transaction.date);
+    const monthIndex = date.getMonth();
+    const monthName = monthsNames[monthIndex];
+    const year = date.getFullYear();
+    return monthName === currentMonth && year === currentYear;
+  });
+}
+function filterTransactionsByYear(
+  transactions: Transaction[],
+  currentYear: number,
+) {
+  return transactions.filter((transaction) => {
+    const year = new Date(transaction.date).getFullYear();
+    return year === currentYear;
+  });
 }

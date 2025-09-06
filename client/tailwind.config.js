@@ -20,7 +20,11 @@ export default {
       26: "26px",
       28: "28px",
     },
-    extend: {},
+    extend: {
+      colors: {
+        'brand-green': '#d9f9e3'
+      }
+    },
   },
   plugins: [],
 };
