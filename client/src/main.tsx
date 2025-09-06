@@ -5,28 +5,28 @@ import {
   RouterProvider,
   useRouteError,
 } from "react-router";
-import { App } from "./App.tsx";
-import {
-  TransactionItemLoader,
-  TransactionItemPage,
-} from "./pages/transaction-item/ui/TransactionItem.tsx";
 import "./index.css";
+import { CardPage } from "./pages/card/card-page.tsx";
+import { CashPage, CashPageLoader } from "./pages/cash/ui/cash-page.tsx";
 import {
   Dashboard,
   indexAction,
   indexLoader,
 } from "./pages/index/ui/index.tsx";
-import { CashPage, CashPageLoader } from "./pages/cash/ui/cash-page.tsx";
+import { Root } from "./pages/root/root.tsx";
 import {
   SavingsPage,
   SavingsPageLoader,
 } from "./pages/savings/savings-page.tsx";
-import { CardPage } from "./pages/card/card-page.tsx";
+import {
+  TransactionItemLoader,
+  TransactionItemPage,
+} from "./pages/transaction-item/ui/TransactionItem.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Root />,
     errorElement: <ErrorBoundary />,
     children: [
       {

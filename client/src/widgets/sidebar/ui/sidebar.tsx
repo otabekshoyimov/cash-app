@@ -1,44 +1,33 @@
-import { type SVGProps } from "react";
-import { NavLink, Outlet } from "react-router";
+import type { SVGProps } from "react";
+import { NavLink } from "react-router";
 
-export function App() {
-  return (
-    <>
-      <div className="flex px-16 h-screen ">
-        <Sidebar />
-        <Outlet />
-      </div>
-    </>
-  );
-}
-
-const Sidebar = () => {
+export function Sidebar() {
   return (
     <>
       <nav className="w-[250px] pt-[36px] h-screen flex flex-col">
         <header className="pb-20 text-xl font-medium pl-6">Cash app</header>
         <div className="pr-16 flex flex-col  flex-1 ">
           <div className="">
-            <NavlinkItem linkLabel="Activity" linkTo={"/"} />
-            <NavlinkItem linkLabel="Cash" linkTo={"/cash"} />
-            <NavlinkItem linkLabel="Savings" linkTo={"/savings"} />
-            <NavlinkItem linkLabel="Card" linkTo={"/card"} />
-            <NavlinkItem linkLabel="Pay & Request" linkTo={"/pay"} />
-            <NavlinkItem linkLabel="Tax filling" linkTo={"/tax"} />
-            <NavlinkItem linkLabel="Documents" linkTo={"/docs"} />
+            <SideabrNavlinkItem linkLabel="Activity" linkTo={"/"} />
+            <SideabrNavlinkItem linkLabel="Cash" linkTo={"/cash"} />
+            <SideabrNavlinkItem linkLabel="Savings" linkTo={"/savings"} />
+            <SideabrNavlinkItem linkLabel="Card" linkTo={"/card"} />
+            <SideabrNavlinkItem linkLabel="Pay & Request" linkTo={"/pay"} />
+            <SideabrNavlinkItem linkLabel="Tax filling" linkTo={"/tax"} />
+            <SideabrNavlinkItem linkLabel="Documents" linkTo={"/docs"} />
           </div>
           <div className="mt-auto pb-16">
-            <NavlinkItem linkLabel="Account" linkTo={"/account"} />
-            <NavlinkItem linkLabel="Support" linkTo={"/support"} />
-            <NavlinkItem linkLabel="Log out" linkTo={"/logout"} />
+            <SideabrNavlinkItem linkLabel="Account" linkTo={"/account"} />
+            <SideabrNavlinkItem linkLabel="Support" linkTo={"/support"} />
+            <SideabrNavlinkItem linkLabel="Log out" linkTo={"/logout"} />
           </div>
         </div>
       </nav>
     </>
   );
-};
+}
 
-const NavlinkItem = (props: { linkLabel: string; linkTo: string }) => {
+const SideabrNavlinkItem = (props: { linkLabel: string; linkTo: string }) => {
   return (
     <NavLink
       to={props.linkTo}
