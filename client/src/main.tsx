@@ -17,6 +17,10 @@ import {
   indexLoader,
 } from "./pages/index/ui/index.tsx";
 import { CashPage, CashPageLoader } from "./pages/cash/ui/cash-page.tsx";
+import {
+  SavingsPage,
+  SavingsPageLoader,
+} from "./pages/savings/savings-page.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +43,11 @@ const router = createBrowserRouter([
         path: "/cash",
         element: <CashPage />,
         loader: CashPageLoader,
+      },
+      {
+        path: "/savings",
+        element: <SavingsPage />,
+        loader: SavingsPageLoader,
       },
     ],
   },

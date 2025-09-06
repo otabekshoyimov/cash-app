@@ -26,6 +26,7 @@ import { Link, useFetcher, useLoaderData } from "react-router";
 
 import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
+import { ActionButton } from "../../cash/ui/cash-page";
 
 echarts.use([
   BarChart,
@@ -107,24 +108,20 @@ export const Dashboard = () => {
           <header className="flex gap-10 justify-between pb-10">
             <div>Search</div>
             <div className="flex gap-10">
-              <button
-                className="px-4"
+              <ActionButton
+                label="New income"
                 onClick={() => {
                   setTransactionType("income");
                   dialogRef.current?.showModal();
                 }}
-              >
-                New income
-              </button>
-              <button
-                className="px-4"
+              ></ActionButton>
+              <ActionButton
+                label="New expense"
                 onClick={() => {
                   setTransactionType("expense");
                   dialogRef.current?.showModal();
                 }}
-              >
-                New expense
-              </button>
+              ></ActionButton>
             </div>
           </header>
           <main className="outline outline-[0.5px] outline-gray-200 flex justify-between">
@@ -376,7 +373,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
           <ToggleButtonGroup
             selectionMode="single"
             selectedKeys={selectedActiveChartTab}
-            className={"bg-white px-4 py-2 rounded-md"}
+            className={"bg-white items-center flex px-8 rounded-2xl"}
             onSelectionChange={(key) => {
               setSelectedActiveChartTab(key);
             }}
@@ -384,7 +381,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
             <ToggleButton
               id={"month"}
               className={({ isSelected }) =>
-                `px-4 border-none rounded-md ${isSelected ? "bg-gray-300 shadow-md" : "bg-white "} `
+                `py-1  border-none px-16 rounded-2xl ${isSelected ? "bg-gray-300 shadow-md" : "bg-white "} `
               }
             >
               Month
@@ -392,7 +389,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
             <ToggleButton
               id={"year"}
               className={({ isSelected }) =>
-                `border-none px-4 rounded-md ${isSelected ? "bg-gray-300 shadow-md" : "bg-white"}`
+                `border-none  px-16 rounded-2xl  ${isSelected ? "bg-gray-300 shadow-md" : "bg-white"}`
               }
             >
               Year
@@ -405,7 +402,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
               setCurrentMonth(String(selected));
             }}
           >
-            <Button className="flex items-center gap-4 px-4 py-2">
+            <Button className="flex items-center gap-4 py-4 rounded-2xl px-16 bg-white">
               <SelectValue />
               <span aria-hidden="true">
                 <ChevronDown size={16} className="pt-4" />
@@ -429,7 +426,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
               setCurrentYear(Number(key));
             }}
           >
-            <Button className="flex items-center gap-4 px-4 py-2">
+            <Button className="flex items-center gap-4  py-4 rounded-2xl px-16 bg-white">
               <SelectValue />
               <span aria-hidden="true">
                 <ChevronDown size={16} className="pt-4" />

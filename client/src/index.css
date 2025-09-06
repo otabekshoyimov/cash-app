@@ -43,6 +43,7 @@ ul {
 
 button {
   font: inherit;
+  border: none;
 }
 select, option {
   font: inherit;

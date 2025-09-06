@@ -24,7 +24,7 @@ function CashBalance() {
   const totalAmount = getTotalTransactionAmount(transactions);
 
   return (
-    <section className="bg-white rounded-lg p-8 pt-16">
+    <section className="bg-white rounded-lg p-8 pt-16 shadow-sm">
       <header className="flex justify-center flex-col items-center">
         <span>Cash balance</span>
       </header>
@@ -32,8 +32,8 @@ function CashBalance() {
         <span className="text-4xl">${totalAmount}</span>
       </main>
       <footer className="flex justify-center pb-16 gap-16">
-        <button>Add cash</button>
-        <button>Cash out</button>
+        <ActionButton label="Add cash" />
+        <ActionButton label="Cash out" />
       </footer>
     </section>
   );
@@ -41,9 +41,9 @@ function CashBalance() {
 
 function AccountDetails() {
   return (
-    <section className="bg-white rounded-lg py-16 px-[32px]">
+    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm">
       <header className="font-medium pb-8">Account details</header>
-      <main className="flex  flex-col gap-8 pr-[54px]">
+      <main className="flex  flex-col gap-16 pr-[54px]">
         <div className="flex flex-col">
           <span className="text-xs">ROUTING</span>
           <span>123 456 789</span>
@@ -53,7 +53,7 @@ function AccountDetails() {
           <div className="flex gap-24">
             <span>*** *** 8910</span>
 
-            <button>Show</button>
+            <ActionButton label="Show" />
           </div>
         </div>
       </main>
@@ -63,9 +63,9 @@ function AccountDetails() {
 
 function MoreWaysToAddMoney() {
   return (
-    <section className="bg-white rounded-lg py-16 px-[32px]">
+    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm">
       <header className="font-medium pb-8">More ways to add money</header>
-      <main className="flex gap-8 flex-col pr-[54px]">
+      <main className="flex gap-16 flex-col pr-[54px]">
         <div>
           <span>Set up direct deposit</span>
         </div>
@@ -77,7 +77,18 @@ function MoreWaysToAddMoney() {
   );
 }
 
-function getTotalTransactionAmount(transactions: Transaction[]) {
+export function ActionButton(props: { label: string; onClick?: () => void }) {
+  return (
+    <button
+      onClick={props.onClick}
+      className="px-16 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm"
+    >
+      {props.label}
+    </button>
+  );
+}
+
+export function getTotalTransactionAmount(transactions: Transaction[]) {
   let total = 0;
   for (const transaction of transactions) {
     if (transaction.type === "income") {
