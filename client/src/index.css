@@ -48,8 +48,6 @@ select, option {
   font: inherit;
 }
 
-
-
 form {
   font-size: inherit;
   display: block;
@@ -74,7 +72,6 @@ dialog {
     border-radius: 0;
     z-index: 1;
     border: none;
-
 
     &[data-disabled] {
       z-index: 0;
