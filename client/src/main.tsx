@@ -16,11 +16,7 @@ import {
   indexAction,
   indexLoader,
 } from "./pages/index/ui/index.tsx";
-
-import PocketBase from "pocketbase";
-
-const API_URL = "https://cash-app-production-b1fe.up.railway.app";
-export const pb = new PocketBase(API_URL);
+import { CashPage, CashPageLoader } from "./pages/cash/ui/cash-page.tsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +34,11 @@ const router = createBrowserRouter([
         path: "/:transactionId",
         element: <TransactionItemPage />,
         loader: TransactionItemLoader,
+      },
+      {
+        path: "/cash",
+        element: <CashPage />,
+        loader: CashPageLoader,
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { useLoaderData, type Params } from "react-router";
 import { TransactionItem, type Transaction } from "../../index/ui";
-import { pb } from "../../../main";
+import { pb } from "../../../shared/api/pocketbase";
 
 export async function TransactionItemLoader({ params }: { params: Params }) {
   const param = params.transactionId;
