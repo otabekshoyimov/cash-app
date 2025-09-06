@@ -14,6 +14,28 @@ import {
 } from "react-aria-components";
 import { useLoaderData } from "react-router";
 import type { Transaction } from "../../pages/index/ui";
+import { BarChart } from "echarts/charts";
+import {
+  DatasetComponent,
+  GridComponent,
+  TitleComponent,
+  TooltipComponent,
+  TransformComponent,
+} from "echarts/components";
+import { LabelLayout, UniversalTransition } from "echarts/features";
+import { SVGRenderer } from "echarts/renderers";
+
+echarts.use([
+  BarChart,
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  DatasetComponent,
+  TransformComponent,
+  LabelLayout,
+  UniversalTransition,
+  SVGRenderer,
+]);
 
 const monthsNames = [
   "January",

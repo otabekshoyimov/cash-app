@@ -1,33 +1,9 @@
-import { BarChart } from "echarts/charts";
-import {
-  DatasetComponent,
-  GridComponent,
-  TitleComponent,
-  TooltipComponent,
-  TransformComponent,
-} from "echarts/components";
-import * as echarts from "echarts/core";
-import { LabelLayout, UniversalTransition } from "echarts/features";
-import { SVGRenderer } from "echarts/renderers";
 import { useRef, useState } from "react";
 import { Link, useFetcher, useLoaderData } from "react-router";
-
 import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
 import { DashboardBarChart } from "../../../widgets/dashboard-chart/dashboard-chart";
 import { ActionButton } from "../../cash/ui/cash-page";
-
-echarts.use([
-  BarChart,
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  DatasetComponent,
-  TransformComponent,
-  LabelLayout,
-  UniversalTransition,
-  SVGRenderer,
-]);
 
 export async function indexLoader() {
   const transactions = await pb.collection("transactions").getFullList();
