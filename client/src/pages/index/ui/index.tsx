@@ -240,7 +240,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
     return monthsNames[month];
   });
 
-  const [currentYear] = useState(() => {
+  const [currentYear, setCurrentYear] = useState<number>(() => {
     const year = new Date().getFullYear();
     return year;
   });
@@ -277,6 +277,10 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       return chartRef.current.setOption({
         title: {
           text: `${currentMonth} activity graph`,
+          textStyle: {
+            fontSize: 18,
+            fontWeight: "normal",
+          },
         },
         tooltip: {},
         xAxis: {
@@ -331,6 +335,10 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       return chartRef.current.setOption({
         title: {
           text: `${currentYear} graph`,
+          textStyle: {
+            fontSize: 18,
+            fontWeight: "normal",
+          },
         },
         tooltip: {},
         xAxis: {
@@ -363,7 +371,7 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
 
   return (
     <section>
-      <header className="flex gap-8 justify-between text-base">
+      <header className="flex gap-8 justify-between text-base pb-8">
         <div className="flex gap-8">
           <ToggleButtonGroup
             selectionMode="single"
@@ -417,8 +425,8 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
           <Select
             name="year"
             selectedKey={currentYear}
-            onSelectionChange={(selected) => {
-              setCurrentMonth(String(selected));
+            onSelectionChange={(key) => {
+              setCurrentYear(Number(key));
             }}
           >
             <Button className="flex items-center gap-4 px-4 py-2">
@@ -452,7 +460,8 @@ function ChartItem(props: { chartSectionRef: RefObject<HTMLElement | null> }) {
       </header>
       <main
         ref={props.chartSectionRef}
-        style={{ width: "600px", height: "360px" }}
+        className="bg-white rounded-2xl"
+        style={{ width: "100%", height: "360px" }}
       ></main>
     </section>
   );
