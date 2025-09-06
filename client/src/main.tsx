@@ -65,11 +65,10 @@ export function ErrorBoundary() {
         <h1>Error</h1>
         <p>{error.message}</p>
         <p>The stack trace is:</p>
-        <p>{error.stack}</p>
+        <pre>{error.stack}</pre>
       </div>
     );
   } else {
     return <h1>Unknown Error</h1>;
   }
 }
-console.log("test");
