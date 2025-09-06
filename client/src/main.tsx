@@ -21,6 +21,7 @@ import {
   SavingsPage,
   SavingsPageLoader,
 } from "./pages/savings/savings-page.tsx";
+import { CardPage } from "./pages/card/card-page.tsx";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         path: "/savings",
         element: <SavingsPage />,
         loader: SavingsPageLoader,
+      },
+      {
+        path: "/card",
+        element: <CardPage />,
       },
     ],
   },
