@@ -15,20 +15,24 @@ export function App() {
 const Sidebar = () => {
   return (
     <>
-      <nav className="w-[250px] pt-[36px] h-full">
-        <header className="pb-20 text-xl font-medium">Cash app</header>
-        <ul className="pr-16">
-          <NavlinkItem linkLabel="Activity" linkTo={"/"} />
-          <NavlinkItem linkLabel="Cash" linkTo={"/cash"} />
-          <NavlinkItem linkLabel="Savings" linkTo={"/savings"} />
-          <NavlinkItem linkLabel="Card" linkTo={"/card"} />
-          <NavlinkItem linkLabel="Pay & Request" linkTo={"/pay"} />
-          <NavlinkItem linkLabel="Tax filling" linkTo={"/tax"} />
-          <NavlinkItem linkLabel="Documents" linkTo={"/docs"} />
-          <NavlinkItem linkLabel="Account" linkTo={"/account"} />
-          <NavlinkItem linkLabel="Support" linkTo={"/support"} />
-          <NavlinkItem linkLabel="Log out" linkTo={"/logout"} />
-        </ul>
+      <nav className="w-[250px] pt-[36px] h-screen flex flex-col">
+        <header className="pb-20 text-xl font-medium pl-6">Cash app</header>
+        <div className="pr-16 flex flex-col  flex-1 ">
+          <div className="">
+            <NavlinkItem linkLabel="Activity" linkTo={"/"} />
+            <NavlinkItem linkLabel="Cash" linkTo={"/cash"} />
+            <NavlinkItem linkLabel="Savings" linkTo={"/savings"} />
+            <NavlinkItem linkLabel="Card" linkTo={"/card"} />
+            <NavlinkItem linkLabel="Pay & Request" linkTo={"/pay"} />
+            <NavlinkItem linkLabel="Tax filling" linkTo={"/tax"} />
+            <NavlinkItem linkLabel="Documents" linkTo={"/docs"} />
+          </div>
+          <div className="mt-auto pb-16">
+            <NavlinkItem linkLabel="Account" linkTo={"/account"} />
+            <NavlinkItem linkLabel="Support" linkTo={"/support"} />
+            <NavlinkItem linkLabel="Log out" linkTo={"/logout"} />
+          </div>
+        </div>
       </nav>
     </>
   );
