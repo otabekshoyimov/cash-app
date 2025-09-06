@@ -4,6 +4,7 @@ import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
 import { DashboardBarChart } from "../../../widgets/dashboard-chart/dashboard-chart";
 import { ActionButton } from "../../cash/ui/cash-page";
+import { XIcon } from "lucide-react";
 
 export async function indexLoader() {
   const transactions = await pb.collection("transactions").getFullList();
@@ -91,24 +92,35 @@ export const Dashboard = () => {
           </header>
           <main className="outline outline-[0.5px] outline-gray-200 flex justify-between">
             <div className="flex gap-10">
-              <dialog ref={dialogRef} className="pb-10">
+              <dialog ref={dialogRef} className="pb-10 rounded-2xl">
                 <fetcher.Form className="flex flex-col" method="POST">
                   <section className="px-10 pt-10">
-                    <header className="flex justify-between pb-10">
+                    <header className="flex justify-between pb-8">
                       <span>Create a new income transaction</span>
                       <button
                         type="button"
+                        className="px-8 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm"
                         onClick={() => dialogRef.current?.close()}
                       >
-                        x
+                        <XIcon size={16} />
                       </button>
                     </header>
-                    <main className="pb-10 flex flex-col">
+                    <main className="pb-10 flex flex-col gap-6">
                       <label htmlFor="">Description</label>
-                      <input type="text" name="description" />
+                      <input
+                        type="text"
+                        name="description"
+                        placeholder="Description"
+                        className="px-16 py-4 rounded-2xl font-medium text-base"
+                      />
 
                       <label htmlFor="">Amount</label>
-                      <input type="number" name="amount" placeholder="0" />
+                      <input
+                        type="number"
+                        name="amount"
+                        placeholder="$0"
+                        className="px-16 py-4 rounded-2xl font-medium text-base "
+                      />
 
                       <input
                         ref={transactionTypeInputRef}
@@ -119,7 +131,10 @@ export const Dashboard = () => {
                     </main>
                   </section>
                   <footer className="flex justify-end pr-10 gap-10">
-                    <button type="submit">
+                    <button
+                      type="submit"
+                      className="px-16 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm"
+                    >
                       {fetcher.state != "idle" ? "creating" : "create"}
                     </button>
                   </footer>
