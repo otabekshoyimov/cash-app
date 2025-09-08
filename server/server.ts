@@ -1,4 +1,5 @@
 import express from "express";
+import { styleText } from "node:util";
 import cors from "cors";
 
 const app = express();
@@ -43,6 +44,7 @@ app.get("/rates", async (req, res) => {
 
 const PORT = 3001;
 app.listen(PORT, () => {
-  console.log(`server is running on http://localhost:${PORT}`);
+  console.log(
+    styleText("magenta", `server is running on http://localhost:${PORT}`)
+  );
 });
-console.log("test");

@@ -13,7 +13,7 @@ import {
   indexAction,
   indexLoader,
 } from "./pages/index/ui/index.tsx";
-import { Root } from "./pages/root/root.tsx";
+import { Root } from "./pages/root/ui/root.tsx";
 import {
   SavingsPage,
   SavingsPageLoader,
