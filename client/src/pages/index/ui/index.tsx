@@ -1,5 +1,5 @@
 import { XIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { data, useFetcher, useLoaderData } from "react-router";
 import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
@@ -95,6 +95,12 @@ export const Dashboard = () => {
   const chartSectionRef = useRef<HTMLElement>(null);
   const transactionTypeInputRef = useRef<HTMLInputElement | null>(null);
 
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data) {
+      dialogRef.current?.close();
+    }
+  }, [fetcher.state, fetcher.data]);
+
   return (
     <div className="pl-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
       <section className="bg-white px-16 py-16 rounded-2xl outline outline-1 outline-black/10">
@@ -188,7 +194,7 @@ export const Dashboard = () => {
                         type="submit"
                         className="px-16 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm outline outline-1 outline-black/10 "
                       >
-                        {fetcher.state != "idle" ? "creating" : "create"}
+                        {fetcher.state != "idle" ? "Creating" : "Create"}
                       </button>
                     </footer>
                   </section>
@@ -202,7 +208,7 @@ export const Dashboard = () => {
               <li className="font-medium">Date</li>
               <li className="font-medium">Amount</li>
             </ul>
-            <div className="grid grid-rows-[1fr_1fr_1fr] gap-4  ">
+            <div className="grid grid-rows-[1fr_1fr_1fr] gap-2  ">
               {transactions.map((transaction) => (
                 <TransactionItem
                   key={transaction.id}

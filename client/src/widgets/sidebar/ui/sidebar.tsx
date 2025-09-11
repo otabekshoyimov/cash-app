@@ -16,7 +16,7 @@ import { NavLink } from "react-router";
 export function Sidebar() {
   return (
     <>
-      <nav className="w-[250px] rounded-lg flex flex-col outline outline-1 outline-black/10 bg-white text-zinc-500">
+      <nav className="w-[250px] rounded-2xl flex flex-col outline outline-1 outline-black/10 bg-white text-zinc-500">
         <header className="py-16 text-lg font-medium px-18 text-[#01b741]">
           $ Cash app
         </header>
@@ -74,7 +74,7 @@ const SideabrNavlinkItem = (props: {
     <NavLink
       to={props.linkTo}
       className={({ isActive }) => {
-        return `items-center gap-8 flex font-medium px-8 py-4 rounded-md hover:bg-[#d9f9e3]  hover:text-[#01b741] ${isActive ? "text-[#01b741] bg-[#d9f9e3]" : "text-[#666666]"}`;
+        return `items-center gap-8 flex font-medium px-8 py-4 rounded-lg hover:bg-[#d9f9e3]  hover:text-[#01b741] ${isActive ? "text-[#01b741] bg-[#d9f9e3]" : "text-[#666666]"}`;
       }}
     >
       {props.children}
