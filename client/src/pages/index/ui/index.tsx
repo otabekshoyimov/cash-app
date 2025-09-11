@@ -1,10 +1,11 @@
 import { XIcon } from "lucide-react";
 import { useRef, useState } from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import { data, useFetcher, useLoaderData } from "react-router";
 import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
 import { DashboardBarChart } from "../../../widgets/dashboard-chart/dashboard-chart";
 import { ActionButton } from "../../cash/ui/cash-page";
+import z from "zod";
 
 export type Rate = {
   amount: number;
@@ -35,17 +36,43 @@ export async function indexLoader(): Promise<{
   return { transactions, rates };
 }
 
+const TransactionSchema = z.object({
+  type: z.enum(["income", "expense"]),
+  description: z.string().min(1, "Description is required"),
+  amount: z.coerce.number().positive("Amount must be positive"),
+});
+
+function validateFormInput(formData: FormData) {
+  const result = TransactionSchema.safeParse({
+    type: formData.get("type"),
+    description: formData.get("description"),
+    amount: formData.get("amount"),
+  });
+
+  return result;
+}
+
 export async function indexAction({ request }: { request: Request }) {
   const formData = await request.formData();
-  const type = formData.get("type");
-  const description = formData.get("description");
-  const amount = formData.get("amount");
+  const result = validateFormInput(formData);
+
+  if (!result.success) {
+    const errors: Record<string, string> = {};
+    console.log(result.error.issues);
+    result.error.issues.forEach((issue) => {
+      const field = issue.path[0];
+      if (field && typeof field === "string") {
+        errors[field] = issue.message;
+      }
+    });
+    return data({ errors }, { status: 400 });
+  }
 
   const newTransaction = {
     date: new Date(),
-    type: type,
-    description: description,
-    amount: Number(amount),
+    type: result.data.type,
+    description: result.data.description,
+    amount: result.data.amount,
   };
   const transactionRecord = await pb
     .collection("transactions")
@@ -61,6 +88,8 @@ export const Dashboard = () => {
     "income",
   );
   const fetcher = useFetcher();
+  let errors = fetcher.data?.errors;
+  console.log("err", errors);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
   const transactionTypeInputRef = useRef<HTMLInputElement | null>(null);
@@ -102,8 +131,8 @@ export const Dashboard = () => {
               <dialog ref={dialogRef} className="pb-10 rounded-2xl">
                 <fetcher.Form className="flex flex-col" method="POST">
                   <section className="px-10 pt-10">
-                    <header className="flex justify-between pb-8">
-                      <span className="font-medium text-gray-400">
+                    <header className="flex justify-between">
+                      <span className="font-medium text-gray-400 ">
                         Create a new income transaction
                       </span>
                       <button
@@ -114,21 +143,33 @@ export const Dashboard = () => {
                         <XIcon size={16} />
                       </button>
                     </header>
-                    <main className="pb-10 flex flex-col gap-6">
-                      <label htmlFor="">Description</label>
+                    <main className="pb-10 flex flex-col gap-6 font-medium">
+                      <div className="flex gap-8">
+                        <label>Description</label>
+                        {errors?.description && (
+                          <span className="text-red-600 ">
+                            {errors.description}
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         name="description"
                         placeholder="Description"
-                        className="px-16 py-4 rounded-2xl font-medium text-base"
+                        className="px-16 py-4 rounded-2xl font-medium text-base border-solid border-gray-300"
                       />
+                      <div className="flex gap-8">
+                        <label>Amount</label>
+                        {errors?.amount && (
+                          <span className="text-red-600 ">{errors.amount}</span>
+                        )}
+                      </div>
 
-                      <label htmlFor="">Amount</label>
                       <input
                         type="number"
                         name="amount"
                         placeholder="$0"
-                        className="px-16 py-4 rounded-2xl font-medium text-base "
+                        className="px-16 py-4 rounded-2xl font-medium text-base border-solid border-gray-300"
                       />
 
                       <input
