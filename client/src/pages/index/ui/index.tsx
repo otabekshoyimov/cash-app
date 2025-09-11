@@ -102,7 +102,7 @@ export const Dashboard = () => {
   }, [fetcher.state, fetcher.data]);
 
   return (
-    <div className="pl-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
+    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
       <section className="bg-white px-16 py-16 rounded-2xl outline outline-1 outline-black/10">
         <main>
           <ul className="flex gap-10">

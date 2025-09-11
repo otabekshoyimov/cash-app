@@ -8,43 +8,128 @@ import {
   HeartPlus,
   Landmark,
   LogOut,
+  Menu,
   PiggyBank,
+  X,
 } from "lucide-react";
-import type { ReactNode, SVGProps } from "react";
-import { NavLink } from "react-router";
+import { useEffect, useState, type ReactNode, type SVGProps } from "react";
+import { NavLink, useLocation } from "react-router";
 
-export function Sidebar() {
+export function Sidebar(props: { isDesktop: boolean }) {
+  return <>{props.isDesktop ? <DesktopNav /> : <MobileNav />}</>;
+}
+
+function DesktopNav() {
   return (
-    <>
-      <nav className="w-[250px] rounded-2xl flex flex-col outline outline-1 outline-black/10 bg-white text-zinc-500">
-        <header className="py-16 text-lg font-medium px-18 text-[#01b741]">
-          $ Cash app
-        </header>
-        <div className="px-16 flex flex-col  flex-1 text-sm">
-          <div className="flex flex-col gap-1 text-base">
+    <nav className="w-[250px] ml-8 rounded-2xl flex flex-col outline outline-1 outline-black/10 bg-white text-zinc-500">
+      <header className="py-16 text-lg font-medium px-18 text-[#01b741]">
+        $ Cash app
+      </header>
+      <div className="px-16 flex flex-col  flex-1 text-sm">
+        <div className="flex flex-col gap-1 text-base">
+          <SideabrNavlinkItem linkLabel="Activity" linkTo={"/"}>
+            <Activity color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Cash" linkTo={"/cash"}>
+            <Coins color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Savings" linkTo={"/savings"}>
+            <PiggyBank color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Card" linkTo={"/card"}>
+            <CreditCard color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Pay & Request" linkTo={"/pay"}>
+            <ArrowDownUp color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Tax filling" linkTo={"/tax"}>
+            <Landmark color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Documents" linkTo={"/docs"}>
+            <File color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+        </div>
+        <div className="mt-auto pb-16 flex gap-1 flex-col text-base">
+          <SideabrNavlinkItem linkLabel="Account" linkTo={"/account"}>
+            <CircleUserRound color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Support" linkTo={"/support"}>
+            <HeartPlus color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+          <SideabrNavlinkItem linkLabel="Log out" linkTo={"/logout"}>
+            <LogOut color="#666666" size={16} stroke="currentColor" />
+          </SideabrNavlinkItem>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function MobileNav() {
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+  return (
+    <nav className="relative z-10">
+      <div className="flex justify-between px-8 pb-8">
+        <span className="text-lg font-medium text-[#01b741]">$ Cash app</span>
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className={`${isOpen ? "bg-white text-black" : "bg-black"} py-4 px-8 rounded-2xl border  border-gray-300 z-50 relative   `}
+        >
+          {isOpen ? (
+            <X size={16} color="#000000" />
+          ) : (
+            <Menu size={16} color="#ffffff" />
+          )}
+        </button>
+      </div>
+
+      {isOpen && (
+        <ul className="fixed inset-0 bg-black  flex flex-col p-6 px-16 gap-8 pt-[50px]">
+          <li>
             <SideabrNavlinkItem linkLabel="Activity" linkTo={"/"}>
               <Activity color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+          <li>
             <SideabrNavlinkItem linkLabel="Cash" linkTo={"/cash"}>
               <Coins color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+          <li>
             <SideabrNavlinkItem linkLabel="Savings" linkTo={"/savings"}>
               <PiggyBank color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+          <li>
             <SideabrNavlinkItem linkLabel="Card" linkTo={"/card"}>
               <CreditCard color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+
+          <li>
             <SideabrNavlinkItem linkLabel="Pay & Request" linkTo={"/pay"}>
               <ArrowDownUp color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+
+          <li>
             <SideabrNavlinkItem linkLabel="Tax filling" linkTo={"/tax"}>
               <Landmark color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+
+          <li>
             <SideabrNavlinkItem linkLabel="Documents" linkTo={"/docs"}>
               <File color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
-          </div>
-          <div className="mt-auto pb-16 flex gap-1 flex-col text-base">
+          </li>
+
+          <li>
             <SideabrNavlinkItem linkLabel="Account" linkTo={"/account"}>
               <CircleUserRound
                 color="#666666"
@@ -52,16 +137,22 @@ export function Sidebar() {
                 stroke="currentColor"
               />
             </SideabrNavlinkItem>
+          </li>
+
+          <li>
             <SideabrNavlinkItem linkLabel="Support" linkTo={"/support"}>
               <HeartPlus color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
+          </li>
+
+          <li>
             <SideabrNavlinkItem linkLabel="Log out" linkTo={"/logout"}>
               <LogOut color="#666666" size={16} stroke="currentColor" />
             </SideabrNavlinkItem>
-          </div>
-        </div>
-      </nav>
-    </>
+          </li>
+        </ul>
+      )}
+    </nav>
   );
 }
 

@@ -201,8 +201,8 @@ export function DashboardBarChart(props: {
   }, [selectedActiveChartTab, currentMonth, currentYear, transactions]);
 
   return (
-    <section>
-      <header className="flex gap-8 justify-between text-base pb-8 pr-8 ">
+    <section className="pb-8">
+      <header className="flex flex-wrap gap-8 justify-between text-base py-8 px-8 ">
         <div className="flex gap-8">
           <ToggleButtonGroup
             selectionMode="single"
