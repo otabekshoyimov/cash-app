@@ -1,18 +1,18 @@
+import { XIcon } from "lucide-react";
 import { useRef, useState } from "react";
-import { Link, useFetcher, useLoaderData } from "react-router";
+import { useFetcher, useLoaderData } from "react-router";
 import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
 import { DashboardBarChart } from "../../../widgets/dashboard-chart/dashboard-chart";
 import { ActionButton } from "../../cash/ui/cash-page";
-import { XIcon } from "lucide-react";
 
-export async function indexLoader() {
-  const transactions = await pb.collection("transactions").getFullList();
-  const BASE_URL = runtimeEnv.BACKEND_URL;
-  const res = await fetch(`${BASE_URL}/rates`);
-  const rates = await res.json();
-  return [transactions, rates];
-}
+export type Rate = {
+  amount: number;
+  base: string;
+  rates: {
+    [currenCode: string]: number;
+  };
+};
 
 export type Transaction = {
   id: string;
@@ -21,6 +21,20 @@ export type Transaction = {
   description: string;
   amount: number;
 };
+
+export async function indexLoader(): Promise<{
+  transactions: Transaction[];
+  rates: Rate;
+}> {
+  const transactions = await pb
+    .collection("transactions")
+    .getFullList<Transaction>();
+  const BASE_URL = runtimeEnv.BACKEND_URL;
+  const res = await fetch(`${BASE_URL}/rates`);
+  const rates: Rate = await res.json();
+  return { transactions, rates };
+}
+
 export async function indexAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const type = formData.get("type");
@@ -36,20 +50,13 @@ export async function indexAction({ request }: { request: Request }) {
   const transactionRecord = await pb
     .collection("transactions")
     .create(newTransaction);
-  console.log("t record", transactionRecord);
   return transactionRecord;
 }
 
-type RateResponse = {
-  amount: number;
-  base: string;
-  rates: Record<string, number>;
-};
-
-type LoaderData = [Transaction[], RateResponse];
+export type IndexLoaderData = Awaited<ReturnType<typeof indexLoader>>;
 
 export const Dashboard = () => {
-  const [transactions, rates] = useLoaderData() as LoaderData;
+  const { transactions, rates } = useLoaderData<IndexLoaderData>();
   const [transactionType, setTransactionType] = useState<"income" | "expense">(
     "income",
   );
@@ -96,7 +103,9 @@ export const Dashboard = () => {
                 <fetcher.Form className="flex flex-col" method="POST">
                   <section className="px-10 pt-10">
                     <header className="flex justify-between pb-8">
-                      <span>Create a new income transaction</span>
+                      <span className="font-medium text-gray-400">
+                        Create a new income transaction
+                      </span>
                       <button
                         type="button"
                         className="px-8 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm"
@@ -148,11 +157,14 @@ export const Dashboard = () => {
               <li className="font-medium">Date</li>
               <li className="font-medium">Amount</li>
             </ul>
-            {transactions.map((transaction: Transaction) => (
-              <Link to={transaction.id} key={transaction.id}>
-                <TransactionItem transaction={transaction} />
-              </Link>
-            ))}
+            <div className="grid grid-rows-[1fr_1fr_1fr] gap-4  ">
+              {transactions.map((transaction) => (
+                <TransactionItem
+                  key={transaction.id}
+                  transaction={transaction}
+                />
+              ))}
+            </div>
           </footer>
         </div>
       </section>

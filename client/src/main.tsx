@@ -18,10 +18,6 @@ import {
   SavingsPage,
   SavingsPageLoader,
 } from "./pages/savings/savings-page.tsx";
-import {
-  TransactionItemLoader,
-  TransactionItemPage,
-} from "./pages/transaction-item/ui/TransactionItem.tsx";
 
 const router = createBrowserRouter([
   {
@@ -34,11 +30,6 @@ const router = createBrowserRouter([
         element: <Dashboard />,
         action: indexAction,
         loader: indexLoader,
-      },
-      {
-        path: "/:transactionId",
-        element: <TransactionItemPage />,
-        loader: TransactionItemLoader,
       },
       {
         path: "/cash",

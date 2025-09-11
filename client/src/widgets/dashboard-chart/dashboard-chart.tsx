@@ -13,7 +13,7 @@ import {
   type Key,
 } from "react-aria-components";
 import { useLoaderData } from "react-router";
-import type { Transaction } from "../../pages/index/ui";
+import type { IndexLoaderData, Transaction } from "../../pages/index/ui";
 import { BarChart } from "echarts/charts";
 import {
   DatasetComponent,
@@ -56,8 +56,7 @@ const years = [2022, 2023, 2024, 2025];
 export function DashboardBarChart(props: {
   chartSectionRef: RefObject<HTMLElement | null>;
 }) {
-  const [transactions] = useLoaderData();
-  console.log("t", transactions);
+  const { transactions } = useLoaderData<IndexLoaderData>();
 
   const [currentMonth, setCurrentMonth] = useState(() => {
     const month = new Date().getMonth();
