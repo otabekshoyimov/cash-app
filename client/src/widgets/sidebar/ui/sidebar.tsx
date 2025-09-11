@@ -75,7 +75,7 @@ function MobileNav() {
   return (
     <nav className="relative z-10">
       <div className="flex justify-between px-8 pb-8">
-        <span className="text-lg font-medium text-[#01b741]">$ Cash app</span>
+        <span className="text-lg font-medium text-[#00e012]">$ Cash app</span>
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           className={`${isOpen ? "bg-white text-black" : "bg-black"} py-4 px-8 rounded-2xl border  border-gray-300 z-50 relative   `}
@@ -165,7 +165,7 @@ const SideabrNavlinkItem = (props: {
     <NavLink
       to={props.linkTo}
       className={({ isActive }) => {
-        return `items-center gap-8 flex font-medium px-8 py-4 rounded-lg hover:bg-[#d9f9e3]  hover:text-[#01b741] ${isActive ? "text-[#01b741] bg-[#d9f9e3]" : "text-[#666666]"}`;
+        return `items-center gap-8 flex font-medium px-8 py-4 rounded-lg  hover:text-[#01b741] ${isActive ? "text-[#01b741]" : "text-[#666666]"}`;
       }}
     >
       {props.children}

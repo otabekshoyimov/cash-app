@@ -81,7 +81,7 @@ export function ActionButton(props: { label: string; onClick?: () => void }) {
   return (
     <button
       onClick={props.onClick}
-      className="px-16 py-4 rounded-2xl bg-[#f4f4f4]  shadow outline-solid outline-zinc-300/10"
+      className="px-16 py-4 rounded-2xl bg-primary-green  shadow outline-solid outline-zinc-300/10"
     >
       {props.label}
     </button>

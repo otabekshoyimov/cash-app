@@ -127,7 +127,7 @@ export function DashboardBarChart(props: {
               currentMonth,
             ),
             itemStyle: {
-              color: "#01b741",
+              color: "#00e012",
               borderRadius: 6,
             },
           },
@@ -182,7 +182,7 @@ export function DashboardBarChart(props: {
             type: "bar",
             data: getIncomeTransactionsByMonth(filteredTransactions),
             itemStyle: {
-              color: "#01b741",
+              color: "#00e012",
               borderRadius: 6,
             },
           },
@@ -203,11 +203,13 @@ export function DashboardBarChart(props: {
   return (
     <section className="pb-8">
       <header className="flex flex-wrap gap-8 justify-between text-base py-8 px-8 ">
-        <div className="flex gap-8">
+        <div className="flex gap-8 flex-wrap">
           <ToggleButtonGroup
             selectionMode="single"
             selectedKeys={selectedActiveChartTab}
-            className={"bg-white items-center flex px-8 rounded-2xl"}
+            className={
+              "bg-white items-center flex px-8 py-4 rounded-2xl shadow outline-solid outline-zinc-300/10"
+            }
             onSelectionChange={(key) => {
               setSelectedActiveChartTab(key);
             }}
@@ -215,7 +217,7 @@ export function DashboardBarChart(props: {
             <ToggleButton
               id={"month"}
               className={({ isSelected }) =>
-                `py-1  border-none px-16 rounded-2xl ${isSelected ? "bg-gray-300 shadow" : "bg-white "} `
+                `py-1  border-none px-16 rounded-2xl  ${isSelected ? "bg-black text-white shadow" : "bg-white "} `
               }
             >
               Month
@@ -223,7 +225,7 @@ export function DashboardBarChart(props: {
             <ToggleButton
               id={"year"}
               className={({ isSelected }) =>
-                `border-none  px-16 rounded-2xl  ${isSelected ? "bg-gray-300 shadow" : "bg-white"}`
+                `border-none  px-16 rounded-2xl  ${isSelected ? "bg-black text-white shadow" : "bg-white"}`
               }
             >
               Year
@@ -236,14 +238,14 @@ export function DashboardBarChart(props: {
               setCurrentMonth(String(selected));
             }}
           >
-            <Button className="flex items-center gap-4 py-4 rounded-2xl px-16 bg-white">
+            <Button className="flex items-center gap-4 py-4 rounded-2xl px-16 bg-black text-white shadow outline-solid outline-zinc-300/10">
               <SelectValue />
               <span aria-hidden="true">
                 <ChevronDown size={16} className="pt-4" />
               </span>
             </Button>
             <Popover>
-              <ListBox className={"bg-green-400 px-16 py-4 rounded-2xl"}>
+              <ListBox className={"bg-black text-white px-16 py-4 rounded-2xl"}>
                 {monthsNames.map((month) => (
                   <ListBoxItem id={month} key={month}>
                     {month}
@@ -260,14 +262,18 @@ export function DashboardBarChart(props: {
               setCurrentYear(Number(key));
             }}
           >
-            <Button className="flex items-center gap-4  py-4 rounded-2xl px-16 bg-white">
+            <Button className="flex items-center gap-4  py-4 rounded-2xl px-16 bg-black text-white shadow outline-solid outline-zinc-300/10">
               <SelectValue />
               <span aria-hidden="true">
                 <ChevronDown size={16} className="pt-4" />
               </span>
             </Button>
             <Popover>
-              <ListBox className={"bg-green-400 px-16 py-4 rounded-md"}>
+              <ListBox
+                className={
+                  "bg-black text-white px-16 py-4 rounded-md shadow outline-solid outline-zinc-300/10"
+                }
+              >
                 {years.map((year) => (
                   <ListBoxItem id={year} key={year}>
                     {year}
@@ -278,9 +284,9 @@ export function DashboardBarChart(props: {
           </Select>
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex gap-8 ">
           <span className="flex items-center gap-6 font-normal">
-            <div className="w-14 h-14 bg-green-600 rounded-lg"></div>
+            <div className="w-14 h-14 bg-primary-green rounded-lg"></div>
             Income
           </span>
           <span className="flex items-center gap-6">

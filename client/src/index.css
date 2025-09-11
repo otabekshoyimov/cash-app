@@ -44,6 +44,7 @@ ul {
 
 button {
   font: inherit;
+  cursor: pointer;
   border: none;
 }
 select, option {

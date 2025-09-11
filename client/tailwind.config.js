@@ -22,7 +22,7 @@ export default {
     },
     extend: {
       colors: {
-        'brand-green': '#d9f9e3'
+        'primary-green': '#00e012'
       }
     },
   },

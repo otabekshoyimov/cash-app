@@ -146,7 +146,7 @@ export const Dashboard = () => {
                       </span>
                       <button
                         type="button"
-                        className="px-8 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm outline outline-1 outline-black/10 "
+                        className="px-8 py-4 rounded-2xl bg-black text-white font-medium shadow-sm outline outline-1 outline-black/10 "
                         onClick={() => dialogRef.current?.close()}
                       >
                         <XIcon size={16} />
@@ -192,7 +192,7 @@ export const Dashboard = () => {
                     <footer className="flex justify-end gap-10">
                       <button
                         type="submit"
-                        className="px-16 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm outline outline-1 outline-black/10 "
+                        className="px-16 py-4 rounded-2xl bg-primary-green text-black font-medium shadow-sm outline outline-1 outline-black/10 "
                       >
                         {fetcher.state != "idle" ? "Creating" : "Create"}
                       </button>
@@ -246,11 +246,7 @@ export function TransactionItem(props: { transaction: Transaction }) {
       <span className="text-[#6e6e6e]">
         {new Date(props.transaction.date).toLocaleDateString()}
       </span>
-      <span
-        className={`${props.transaction.type === "income" ? "text-green-600" : "text-red-600"}`}
-      >
-        ${props.transaction.amount}
-      </span>
+      <span>${props.transaction.amount}</span>
     </section>
   );
 }
