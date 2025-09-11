@@ -1,8 +1,8 @@
 export function CardPage() {
   return (
-    <div className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full flex flex-col gap-16">
+    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
       <CardDetails />
-      <div className="flex gap-16">
+      <div className="flex gap-8">
         <Security />
         <ReplaceCard />
       </div>

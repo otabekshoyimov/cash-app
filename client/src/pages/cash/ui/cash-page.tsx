@@ -9,9 +9,9 @@ export async function CashPageLoader() {
 
 export function CashPage() {
   return (
-    <div className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full flex flex-col gap-16">
+    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
       <CashBalance />
-      <div className="flex gap-16 justify-between">
+      <div className="flex gap-8 justify-between">
         <AccountDetails />
         <MoreWaysToAddMoney />
       </div>
@@ -24,7 +24,7 @@ function CashBalance() {
   const totalAmount = getTotalTransactionAmount(transactions);
 
   return (
-    <section className="bg-white rounded-lg p-8 pt-16 shadow-sm">
+    <section className="bg-white rounded-lg p-8 pt-16 shadow-sm outline outline-1 outline-black/10">
       <header className="flex justify-center flex-col items-center">
         <span>Cash balance</span>
       </header>
@@ -41,7 +41,7 @@ function CashBalance() {
 
 function AccountDetails() {
   return (
-    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm">
+    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm outline outline-1 outline-black/10">
       <header className="font-medium pb-8">Account details</header>
       <main className="flex  flex-col gap-16 pr-[54px]">
         <div className="flex flex-col">
@@ -63,7 +63,7 @@ function AccountDetails() {
 
 function MoreWaysToAddMoney() {
   return (
-    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm">
+    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm ">
       <header className="font-medium pb-8">More ways to add money</header>
       <main className="flex gap-16 flex-col pr-[54px]">
         <div>
@@ -81,7 +81,7 @@ export function ActionButton(props: { label: string; onClick?: () => void }) {
   return (
     <button
       onClick={props.onClick}
-      className="px-16 py-4 rounded-2xl bg-[#f4f4f4] font-medium shadow-sm"
+      className="px-16 py-4 rounded-2xl bg-[#f4f4f4]  shadow outline-solid outline-zinc-300/10"
     >
       {props.label}
     </button>

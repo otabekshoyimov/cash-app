@@ -6,7 +6,7 @@ import {
   useRouteError,
 } from "react-router";
 import "./index.css";
-import { CardPage } from "./pages/card/card-page.tsx";
+import { CardPage } from "./pages/card/ui/card-page.tsx";
 import { CashPage, CashPageLoader } from "./pages/cash/ui/cash-page.tsx";
 import {
   Dashboard,
@@ -17,7 +17,7 @@ import { Root } from "./pages/root/ui/root.tsx";
 import {
   SavingsPage,
   SavingsPageLoader,
-} from "./pages/savings/savings-page.tsx";
+} from "./pages/savings/ui/savings-page.tsx";
 
 const router = createBrowserRouter([
   {

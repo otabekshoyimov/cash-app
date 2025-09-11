@@ -13,7 +13,7 @@ import {
   type Key,
 } from "react-aria-components";
 import { useLoaderData } from "react-router";
-import type { IndexLoaderData, Transaction } from "../../pages/index/ui";
+import type { IndexLoaderData, Transaction } from "../../../pages/index/ui";
 import { BarChart } from "echarts/charts";
 import {
   DatasetComponent,
@@ -100,10 +100,15 @@ export function DashboardBarChart(props: {
       return chartRef.current.setOption({
         title: {
           text: `${currentMonth} activity graph`,
+          left: 0,
           textStyle: {
             fontSize: 18,
             fontWeight: "normal",
           },
+          padding: [0, 0, 0, 16],
+        },
+        grid: {
+          left: 50,
         },
         tooltip: {},
         xAxis: {
@@ -163,6 +168,9 @@ export function DashboardBarChart(props: {
             fontWeight: "normal",
           },
         },
+        grid: {
+          left: 50,
+        },
         tooltip: {},
         xAxis: {
           data: monthsNames,
@@ -194,7 +202,7 @@ export function DashboardBarChart(props: {
 
   return (
     <section>
-      <header className="flex gap-8 justify-between text-base pb-8">
+      <header className="flex gap-8 justify-between text-base pb-8 pr-8 ">
         <div className="flex gap-8">
           <ToggleButtonGroup
             selectionMode="single"
@@ -207,7 +215,7 @@ export function DashboardBarChart(props: {
             <ToggleButton
               id={"month"}
               className={({ isSelected }) =>
-                `py-1  border-none px-16 rounded-2xl ${isSelected ? "bg-gray-300 shadow-md" : "bg-white "} `
+                `py-1  border-none px-16 rounded-2xl ${isSelected ? "bg-gray-300 shadow" : "bg-white "} `
               }
             >
               Month
@@ -215,7 +223,7 @@ export function DashboardBarChart(props: {
             <ToggleButton
               id={"year"}
               className={({ isSelected }) =>
-                `border-none  px-16 rounded-2xl  ${isSelected ? "bg-gray-300 shadow-md" : "bg-white"}`
+                `border-none  px-16 rounded-2xl  ${isSelected ? "bg-gray-300 shadow" : "bg-white"}`
               }
             >
               Year
@@ -235,7 +243,7 @@ export function DashboardBarChart(props: {
               </span>
             </Button>
             <Popover>
-              <ListBox className={"bg-white px-8 py-4 rounded-md"}>
+              <ListBox className={"bg-green-400 px-16 py-4 rounded-2xl"}>
                 {monthsNames.map((month) => (
                   <ListBoxItem id={month} key={month}>
                     {month}
@@ -259,7 +267,7 @@ export function DashboardBarChart(props: {
               </span>
             </Button>
             <Popover>
-              <ListBox className={"bg-white px-8 py-4 rounded-md"}>
+              <ListBox className={"bg-green-400 px-16 py-4 rounded-md"}>
                 {years.map((year) => (
                   <ListBoxItem id={year} key={year}>
                     {year}
@@ -271,19 +279,19 @@ export function DashboardBarChart(props: {
         </div>
 
         <div className="flex gap-8">
-          <span className="flex items-center gap-6">
+          <span className="flex items-center gap-6 font-normal">
             <div className="w-14 h-14 bg-green-600 rounded-lg"></div>
-            income
+            Income
           </span>
           <span className="flex items-center gap-6">
             <div className="w-14 h-14 bg-red-600 rounded-lg"></div>
-            expense
+            Expense
           </span>
         </div>
       </header>
       <main
         ref={props.chartSectionRef}
-        className="bg-white rounded-2xl"
+        className="bg-white rounded-2xl outline outline-1 outline-black/10"
         style={{ width: "100%", height: "360px" }}
       ></main>
     </section>

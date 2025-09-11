@@ -1,9 +1,12 @@
 import { useLoaderData } from "react-router";
 import * as echarts from "echarts";
-import { pb } from "../../shared/api/pocketbase";
-import { ActionButton, getTotalTransactionAmount } from "../cash/ui/cash-page";
+import { pb } from "../../../shared/api/pocketbase";
+import {
+  ActionButton,
+  getTotalTransactionAmount,
+} from "../../cash/ui/cash-page";
 import { useEffect, useRef } from "react";
-import type { Transaction } from "../index/ui";
+import type { Transaction } from "../../index/ui";
 
 export async function SavingsPageLoader() {
   const transactions = await pb.collection("transactions").getFullList();
@@ -12,9 +15,9 @@ export async function SavingsPageLoader() {
 
 export function SavingsPage() {
   return (
-    <div className="px-[40px] py-[40px] flex-1 bg-[#f4f4f4] h-full flex flex-col gap-16">
+    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
       <Savings />
-      <div className="flex gap-16">
+      <div className="flex gap-8">
         <Goal />
         <Transfers />
       </div>
@@ -28,7 +31,7 @@ function Savings() {
 
   return (
     <>
-      <section className="bg-white rounded-lg p-8 pt-16 shadow-sm">
+      <section className="bg-white rounded-lg p-8 pt-16 shadow-sm outline outline-1 outline-black/10">
         <header className="flex justify-center flex-col items-center">
           <span>Savings</span>
         </header>
@@ -111,7 +114,7 @@ function Goal() {
           detail: {
             width: 50,
             height: 14,
-            fontSize: 16,
+            fontSize: 20,
             color: "black",
             formatter: "${value}",
           },
@@ -120,7 +123,7 @@ function Goal() {
     });
   }, [ringChartRef]);
   return (
-    <section className="bg-white rounded-lg py-16 px-16 shadow-sm">
+    <section className="bg-white rounded-lg py-16 px-16 shadow-sm outline outline-1 outline-black/10">
       <header className="font-medium">Goal</header>
       <main
         ref={ringChartRef}
@@ -133,7 +136,7 @@ function Goal() {
 function Transfers() {
   const transaction = useLoaderData();
   return (
-    <section className="bg-white rounded-lg py-16 px-16 w-full shadow-sm">
+    <section className="bg-white rounded-lg py-16 px-16 w-full shadow-sm outline outline-1 outline-black/10">
       <header className="font-medium pb-8">Transfers</header>
       <main>
         {transaction.map((transaction: Transaction) => (
@@ -143,7 +146,7 @@ function Transfers() {
           >
             <div className="flex flex-col">
               <span>{transaction.description}</span>
-              <span className="text-gray-400">
+              <span className="text-zinc-500">
                 {new Date(transaction.date).toLocaleDateString()}
               </span>
             </div>
