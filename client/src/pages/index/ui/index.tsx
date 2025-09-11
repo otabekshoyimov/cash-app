@@ -91,6 +91,7 @@ export const Dashboard = () => {
   let errors = fetcher.data?.errors;
   console.log("err", errors);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const descriptionInputRef = useRef<HTMLInputElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
   const transactionTypeInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -115,6 +116,7 @@ export const Dashboard = () => {
                 onClick={() => {
                   setTransactionType("income");
                   dialogRef.current?.showModal();
+                  descriptionInputRef.current?.focus();
                 }}
               ></ActionButton>
               <ActionButton
@@ -122,6 +124,7 @@ export const Dashboard = () => {
                 onClick={() => {
                   setTransactionType("expense");
                   dialogRef.current?.showModal();
+                  descriptionInputRef.current?.focus();
                 }}
               ></ActionButton>
             </div>
@@ -155,6 +158,7 @@ export const Dashboard = () => {
                       <input
                         type="text"
                         name="description"
+                        ref={descriptionInputRef}
                         placeholder="Description"
                         className="px-16 py-4 rounded-2xl font-medium text-base border-solid border-gray-300"
                       />
