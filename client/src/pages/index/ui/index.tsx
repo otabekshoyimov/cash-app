@@ -96,7 +96,7 @@ export const Dashboard = () => {
   const transactionTypeInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data) {
+    if (fetcher.state === "idle" && fetcher.data && !fetcher.data.errors) {
       dialogRef.current?.close();
     }
   }, [fetcher.state, fetcher.data]);
