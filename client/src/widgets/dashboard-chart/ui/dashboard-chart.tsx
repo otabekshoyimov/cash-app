@@ -1,6 +1,16 @@
+import { BarChart } from "echarts/charts";
+import {
+  DatasetComponent,
+  GridComponent,
+  TitleComponent,
+  TooltipComponent,
+  TransformComponent,
+} from "echarts/components";
+import * as echarts from "echarts/core";
+import { LabelLayout, UniversalTransition } from "echarts/features";
+import { SVGRenderer } from "echarts/renderers";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState, type RefObject } from "react";
-import * as echarts from "echarts/core";
 import {
   Button,
   ListBox,
@@ -12,18 +22,7 @@ import {
   ToggleButtonGroup,
   type Key,
 } from "react-aria-components";
-import { useLoaderData } from "react-router";
-import type { IndexLoaderData, Transaction } from "../../../pages/index/ui";
-import { BarChart } from "echarts/charts";
-import {
-  DatasetComponent,
-  GridComponent,
-  TitleComponent,
-  TooltipComponent,
-  TransformComponent,
-} from "echarts/components";
-import { LabelLayout, UniversalTransition } from "echarts/features";
-import { SVGRenderer } from "echarts/renderers";
+import type { Transaction } from "../../../pages/index/ui";
 
 echarts.use([
   BarChart,
