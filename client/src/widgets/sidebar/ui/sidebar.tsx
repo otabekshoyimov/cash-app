@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type ReactNode, type SVGProps } from "react";
 import { Link, NavLink, useLocation } from "react-router";
+import { useIsDesktop } from "../../../pages/root/ui/root";
 
 export function Sidebar(props: { isDesktop: boolean }) {
   return <>{props.isDesktop ? <DesktopNav /> : <MobileNav />}</>;
@@ -68,6 +69,10 @@ function DesktopNav() {
 function MobileNav() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
 
   useEffect(() => {
     setIsOpen(false);
@@ -163,11 +168,20 @@ const SideabrNavlinkItem = (props: {
   linkTo: string;
   children: ReactNode;
 }) => {
+  const isDesktop = useIsDesktop();
   return (
     <NavLink
       to={props.linkTo}
       className={({ isActive }) => {
-        return `flex items-center gap-8 rounded-lg px-8 py-4 font-medium hover:text-[#01b741] ${isActive ? "text-[#01b741]" : "text-[#666666]"}`;
+        if (isDesktop) {
+          return `flex items-center gap-8 rounded-lg px-8 py-4 font-medium hover:text-[#01b741] ${
+            isActive ? "text-[#01b741]" : "text-[#666666]"
+          }`;
+        } else {
+          return `flex items-center gap-8 rounded-lg px-8 py-4 font-medium hover:text-[#01b741] ${
+            isActive ? "text-[#01b741]" : "text-white"
+          }`;
+        }
       }}
     >
       {props.children}

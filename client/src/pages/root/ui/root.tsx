@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 import { Sidebar } from "../../../widgets/sidebar/ui/sidebar";
 import { useEffect, useState } from "react";
 
-function useIsDesktop() {
+export function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 1024);
 
   useEffect(() => {
