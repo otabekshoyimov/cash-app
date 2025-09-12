@@ -24,7 +24,9 @@ function DesktopNav() {
   return (
     <nav className="ml-8 flex w-[250px] flex-col rounded-2xl bg-white text-zinc-500 outline outline-1 outline-black/10">
       <header className="px-18 py-16 text-lg font-medium text-[#01b741]">
-        <Link to={"/"}>$ Cash app</Link>
+        <Link className="text-xl" to={"/"}>
+          $ Cash app
+        </Link>
       </header>
       <div className="flex flex-1 flex-col px-16 text-sm">
         <div className="flex flex-col gap-1 text-base">
@@ -80,7 +82,7 @@ function MobileNav() {
   return (
     <nav className="relative z-10">
       <div className="flex justify-between px-8 pb-8">
-        <Link to={"/"} className="text-lg font-medium text-[#00e012]">
+        <Link to={"/"} className="text-xl font-medium text-[#00e012]">
           $ Cash app
         </Link>
         <button
