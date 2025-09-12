@@ -22,8 +22,8 @@ export default {
     },
     extend: {
       colors: {
-        'primary-green': '#00e012'
-      }
+        "primary-green": "#00e012",
+      },
     },
   },
   plugins: [],

@@ -15,7 +15,7 @@ export async function SavingsPageLoader() {
 
 export function SavingsPage() {
   return (
-    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
+    <div className="flex h-full flex-1 flex-col gap-8 bg-[#f4f4f4] px-8">
       <Savings />
       <div className="flex gap-8">
         <Goal />
@@ -31,14 +31,14 @@ function Savings() {
 
   return (
     <>
-      <section className="bg-white rounded-lg p-8 pt-16 shadow-sm outline outline-1 outline-black/10">
-        <header className="flex justify-center flex-col items-center">
+      <section className="rounded-lg bg-white p-8 pt-16 shadow-sm outline outline-1 outline-black/10">
+        <header className="flex flex-col items-center justify-center">
           <span>Savings</span>
         </header>
         <main className="flex justify-center pb-16">
           <span className="text-4xl">${totalAmount}</span>
         </main>
-        <footer className="flex justify-center pb-16 gap-16">
+        <footer className="flex justify-center gap-16 pb-16">
           <ActionButton label="Transfer in" />
           <ActionButton label="Transfer out" />
         </footer>
@@ -123,7 +123,7 @@ function Goal() {
     });
   }, [ringChartRef]);
   return (
-    <section className="bg-white rounded-lg py-16 px-16 shadow-sm outline outline-1 outline-black/10">
+    <section className="rounded-lg bg-white px-16 py-16 shadow-sm outline outline-1 outline-black/10">
       <header className="font-medium">Goal</header>
       <main
         ref={ringChartRef}
@@ -136,13 +136,13 @@ function Goal() {
 function Transfers() {
   const transaction = useLoaderData();
   return (
-    <section className="bg-white rounded-lg py-16 px-16 w-full shadow-sm outline outline-1 outline-black/10">
-      <header className="font-medium pb-8">Transfers</header>
+    <section className="w-full rounded-lg bg-white px-16 py-16 shadow-sm outline outline-1 outline-black/10">
+      <header className="pb-8 font-medium">Transfers</header>
       <main>
         {transaction.map((transaction: Transaction) => (
           <li
             key={transaction.id}
-            className="flex items-center gap-16 justify-between"
+            className="flex items-center justify-between gap-16"
           >
             <div className="flex flex-col">
               <span>{transaction.description}</span>

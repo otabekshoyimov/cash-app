@@ -1,6 +1,6 @@
 export function CardPage() {
   return (
-    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
+    <div className="flex h-full flex-1 flex-col gap-8 bg-[#f4f4f4] px-8">
       <CardDetails />
       <div className="flex gap-8">
         <Security />
@@ -12,10 +12,10 @@ export function CardPage() {
 
 function CardDetails() {
   return (
-    <section className="bg-white rounded-lg ">
+    <section className="rounded-lg bg-white">
       <header></header>
       <main className="flex justify-center py-16">
-        <div className="rounded-2xl bg-gray-300 w-[320px] h-[220px]"></div>
+        <div className="h-[220px] w-[320px] rounded-2xl bg-gray-300"></div>
       </main>
     </section>
   );
@@ -23,8 +23,8 @@ function CardDetails() {
 
 function Security() {
   return (
-    <section className="bg-white rounded-lg w-full px-16 py-16">
-      <header className="font-medium pb-8">Security</header>
+    <section className="w-full rounded-lg bg-white px-16 py-16">
+      <header className="pb-8 font-medium">Security</header>
       <main className="flex flex-col gap-16">
         <span>Lock card</span>
         <span>Change PIN</span>
@@ -35,8 +35,8 @@ function Security() {
 
 function ReplaceCard() {
   return (
-    <section className="bg-white rounded-lg w-full px-16 py-16">
-      <header className="font-medium pb-8">Security</header>
+    <section className="w-full rounded-lg bg-white px-16 py-16">
+      <header className="pb-8 font-medium">Security</header>
       <main className="flex flex-col gap-16">
         <span>Design a new card</span>
         <span>Order a replacement card</span>

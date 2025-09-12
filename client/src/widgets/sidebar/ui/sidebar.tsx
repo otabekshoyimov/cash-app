@@ -21,11 +21,11 @@ export function Sidebar(props: { isDesktop: boolean }) {
 
 function DesktopNav() {
   return (
-    <nav className="w-[250px] ml-8 rounded-2xl flex flex-col outline outline-1 outline-black/10 bg-white text-zinc-500">
-      <header className="py-16 text-lg font-medium px-18 text-[#01b741]">
+    <nav className="ml-8 flex w-[250px] flex-col rounded-2xl bg-white text-zinc-500 outline outline-1 outline-black/10">
+      <header className="px-18 py-16 text-lg font-medium text-[#01b741]">
         $ Cash app
       </header>
-      <div className="px-16 flex flex-col  flex-1 text-sm">
+      <div className="flex flex-1 flex-col px-16 text-sm">
         <div className="flex flex-col gap-1 text-base">
           <SideabrNavlinkItem linkLabel="Activity" linkTo={"/"}>
             <Activity color="#666666" size={16} stroke="currentColor" />
@@ -49,7 +49,7 @@ function DesktopNav() {
             <File color="#666666" size={16} stroke="currentColor" />
           </SideabrNavlinkItem>
         </div>
-        <div className="mt-auto pb-16 flex gap-1 flex-col text-base">
+        <div className="mt-auto flex flex-col gap-1 pb-16 text-base">
           <SideabrNavlinkItem linkLabel="Account" linkTo={"/account"}>
             <CircleUserRound color="#666666" size={16} stroke="currentColor" />
           </SideabrNavlinkItem>
@@ -78,7 +78,7 @@ function MobileNav() {
         <span className="text-lg font-medium text-[#00e012]">$ Cash app</span>
         <button
           onClick={() => setIsOpen((prev) => !prev)}
-          className={`${isOpen ? "bg-white text-black" : "bg-black"} py-4 px-8 rounded-2xl border  border-gray-300 z-50 relative   `}
+          className={`${isOpen ? "bg-white text-black" : "bg-black"} relative z-50 rounded-2xl border border-gray-300 px-8 py-4`}
         >
           {isOpen ? (
             <X size={16} color="#000000" />
@@ -89,7 +89,7 @@ function MobileNav() {
       </div>
 
       {isOpen && (
-        <ul className="fixed inset-0 bg-black  flex flex-col p-6 px-16 gap-8 pt-[50px]">
+        <ul className="fixed inset-0 flex flex-col gap-8 bg-black p-6 px-16 pt-[50px]">
           <li>
             <SideabrNavlinkItem linkLabel="Activity" linkTo={"/"}>
               <Activity color="#666666" size={16} stroke="currentColor" />
@@ -165,7 +165,7 @@ const SideabrNavlinkItem = (props: {
     <NavLink
       to={props.linkTo}
       className={({ isActive }) => {
-        return `items-center gap-8 flex font-medium px-8 py-4 rounded-lg  hover:text-[#01b741] ${isActive ? "text-[#01b741]" : "text-[#666666]"}`;
+        return `flex items-center gap-8 rounded-lg px-8 py-4 font-medium hover:text-[#01b741] ${isActive ? "text-[#01b741]" : "text-[#666666]"}`;
       }}
     >
       {props.children}

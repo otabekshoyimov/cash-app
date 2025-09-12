@@ -9,9 +9,9 @@ export async function CashPageLoader() {
 
 export function CashPage() {
   return (
-    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
+    <div className="flex h-full flex-1 flex-col gap-8 bg-[#f4f4f4] px-8">
       <CashBalance />
-      <div className="flex gap-8 justify-between">
+      <div className="flex justify-between gap-8">
         <AccountDetails />
         <MoreWaysToAddMoney />
       </div>
@@ -24,14 +24,14 @@ function CashBalance() {
   const totalAmount = getTotalTransactionAmount(transactions);
 
   return (
-    <section className="bg-white rounded-lg p-8 pt-16 shadow-sm outline outline-1 outline-black/10">
-      <header className="flex justify-center flex-col items-center">
+    <section className="rounded-lg bg-white p-8 pt-16 shadow-sm outline outline-1 outline-black/10">
+      <header className="flex flex-col items-center justify-center">
         <span>Cash balance</span>
       </header>
       <main className="flex justify-center pb-16">
         <span className="text-4xl">${totalAmount}</span>
       </main>
-      <footer className="flex justify-center pb-16 gap-16">
+      <footer className="flex justify-center gap-16 pb-16">
         <ActionButton label="Add cash" />
         <ActionButton label="Cash out" />
       </footer>
@@ -41,9 +41,9 @@ function CashBalance() {
 
 function AccountDetails() {
   return (
-    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm outline outline-1 outline-black/10">
-      <header className="font-medium pb-8">Account details</header>
-      <main className="flex  flex-col gap-16 pr-[54px]">
+    <section className="w-full rounded-lg bg-white px-16 py-16 shadow-sm outline outline-1 outline-black/10">
+      <header className="pb-8 font-medium">Account details</header>
+      <main className="flex flex-col gap-16 pr-[54px]">
         <div className="flex flex-col">
           <span className="text-xs">ROUTING</span>
           <span>123 456 789</span>
@@ -63,9 +63,9 @@ function AccountDetails() {
 
 function MoreWaysToAddMoney() {
   return (
-    <section className="bg-white rounded-lg py-16 w-full px-16 shadow-sm ">
-      <header className="font-medium pb-8">More ways to add money</header>
-      <main className="flex gap-16 flex-col pr-[54px]">
+    <section className="w-full rounded-lg bg-white px-16 py-16 shadow-sm">
+      <header className="pb-8 font-medium">More ways to add money</header>
+      <main className="flex flex-col gap-16 pr-[54px]">
         <div>
           <span>Set up direct deposit</span>
         </div>
@@ -81,7 +81,7 @@ export function ActionButton(props: { label: string; onClick?: () => void }) {
   return (
     <button
       onClick={props.onClick}
-      className="px-16 py-4 rounded-2xl bg-primary-green  shadow outline-solid outline-zinc-300/10"
+      className="outline-solid rounded-2xl bg-primary-green px-16 py-4 shadow outline-zinc-300/10"
     >
       {props.label}
     </button>

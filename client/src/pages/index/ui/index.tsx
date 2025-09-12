@@ -102,8 +102,8 @@ export const Dashboard = () => {
   }, [fetcher.state, fetcher.data]);
 
   return (
-    <div className="px-8 flex-1 bg-[#f4f4f4] h-full flex flex-col gap-8">
-      <section className="bg-white px-16 py-16 rounded-2xl outline outline-1 outline-black/10">
+    <div className="flex h-full flex-1 flex-col gap-8 bg-[#f4f4f4] px-8">
+      <section className="rounded-2xl bg-white px-16 py-16 outline outline-1 outline-black/10">
         <main>
           <ul className="flex gap-10">
             {Object.entries(rates.rates).map(([key, value]) => (
@@ -112,9 +112,9 @@ export const Dashboard = () => {
           </ul>
         </main>
       </section>
-      <section className="bg-white px-16 py-16 rounded-2xl h-full outline outline-1 outline-black/10">
+      <section className="h-full rounded-2xl bg-white px-16 py-16 outline outline-1 outline-black/10">
         <div>
-          <header className="flex gap-10 justify-between pb-10">
+          <header className="flex justify-between gap-10 pb-10">
             <div>Search</div>
             <div className="flex gap-10">
               <ActionButton
@@ -135,28 +135,28 @@ export const Dashboard = () => {
               ></ActionButton>
             </div>
           </header>
-          <main className="outline outline-[0.5px] outline-gray-200 flex justify-between">
+          <main className="flex justify-between outline outline-[0.5px] outline-gray-200">
             <div className="flex gap-10">
-              <dialog ref={dialogRef} className="pb-10 rounded-2xl">
+              <dialog ref={dialogRef} className="rounded-2xl pb-10">
                 <fetcher.Form className="flex flex-col" method="POST">
                   <section className="px-16 pt-8">
                     <header className="flex justify-between">
-                      <span className=" text-gray-400 ">
+                      <span className="text-gray-400">
                         Create a new income transaction
                       </span>
                       <button
                         type="button"
-                        className="px-8 py-4 rounded-2xl bg-black text-white font-medium shadow-sm outline outline-1 outline-black/10 "
+                        className="rounded-2xl bg-black px-8 py-4 font-medium text-white shadow-sm outline outline-1 outline-black/10"
                         onClick={() => dialogRef.current?.close()}
                       >
                         <XIcon size={16} />
                       </button>
                     </header>
-                    <main className="pb-10 flex flex-col gap-8 ">
+                    <main className="flex flex-col gap-8 pb-10">
                       <div className="flex gap-8">
                         <label className="text-zinc-600">Description</label>
                         {errors?.description && (
-                          <span className="text-red-600 ">
+                          <span className="text-red-600">
                             {errors.description}
                           </span>
                         )}
@@ -166,12 +166,12 @@ export const Dashboard = () => {
                         name="description"
                         ref={descriptionInputRef}
                         placeholder="Description"
-                        className="px-8 rounded-lg py-2 text-base border-none outline-solid outline-zinc-300/10 shadow"
+                        className="outline-solid rounded-lg border-none px-8 py-2 text-base shadow outline-zinc-300/10"
                       />
                       <div className="flex gap-8">
                         <label>Amount</label>
                         {errors?.amount && (
-                          <span className="text-red-600 ">{errors.amount}</span>
+                          <span className="text-red-600">{errors.amount}</span>
                         )}
                       </div>
 
@@ -179,7 +179,7 @@ export const Dashboard = () => {
                         type="number"
                         name="amount"
                         placeholder="$0"
-                        className="px-8 py-2 rounded-lg text-base border-none outline-solid outline-zinc-300/10 shadow"
+                        className="outline-solid rounded-lg border-none px-8 py-2 text-base shadow outline-zinc-300/10"
                       />
 
                       <input
@@ -192,7 +192,7 @@ export const Dashboard = () => {
                     <footer className="flex justify-end gap-10">
                       <button
                         type="submit"
-                        className="px-16 py-4 rounded-2xl bg-primary-green text-black font-medium shadow-sm outline outline-1 outline-black/10 "
+                        className="rounded-2xl bg-primary-green px-16 py-4 font-medium text-black shadow-sm outline outline-1 outline-black/10"
                       >
                         {fetcher.state != "idle" ? "Creating" : "Create"}
                       </button>
@@ -208,7 +208,7 @@ export const Dashboard = () => {
               <li className="font-medium">Date</li>
               <li className="font-medium">Amount</li>
             </ul>
-            <div className="grid grid-rows-[1fr_1fr_1fr] gap-2  ">
+            <div className="grid grid-rows-[1fr_1fr_1fr] gap-2">
               {transactions.map((transaction) => (
                 <TransactionItem
                   key={transaction.id}
@@ -226,9 +226,9 @@ export const Dashboard = () => {
 
 function DashboardChipItem(props: { currency: string; value: number }) {
   return (
-    <li className="outline outline-[0.5px] outline-gray-300 rounded-xl p-8">
+    <li className="rounded-xl p-8 outline outline-[0.5px] outline-gray-300">
       <header className="text-center text-sm">{props.currency}</header>
-      <main className="text-2xl ">
+      <main className="text-2xl">
         {props.currency === "USD" && <span>$</span>}
         {props.currency === "EUR" && <span>€</span>}
 
@@ -241,12 +241,17 @@ function DashboardChipItem(props: { currency: string; value: number }) {
 
 export function TransactionItem(props: { transaction: Transaction }) {
   return (
-    <section className="bg-white rounded-md  gap-8  flex justify-between">
+    <section className="flex justify-between gap-8 rounded-md bg-white">
       <span>{props.transaction.description}</span>
       <span className="text-[#6e6e6e]">
         {new Date(props.transaction.date).toLocaleDateString()}
       </span>
-      <span>${props.transaction.amount}</span>
+
+      <span>
+        {props.transaction.type === "income" && <span>+ $</span>}
+        {props.transaction.type === "expense" && <span>- $</span>}
+        {props.transaction.amount}
+      </span>
     </section>
   );
 }
