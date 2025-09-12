@@ -208,7 +208,7 @@ export function DashboardBarChart(props: {
             selectionMode="single"
             selectedKeys={selectedActiveChartTab}
             className={
-              "outline-solid flex items-center rounded-2xl bg-white px-8 shadow outline-zinc-300/10"
+              "outline-solid flex items-center rounded-2xl bg-white shadow outline-zinc-300/10"
             }
             onSelectionChange={(key) => {
               setSelectedActiveChartTab(key);
@@ -217,7 +217,7 @@ export function DashboardBarChart(props: {
             <ToggleButton
               id={"month"}
               className={({ isSelected }) =>
-                `rounded-2xl border-none px-16 py-1 ${isSelected ? "bg-black text-white shadow" : "bg-white"} `
+                `rounded-2xl border-none px-16 py-4 ${isSelected ? "bg-black text-white shadow" : "bg-white"} `
               }
             >
               Month
@@ -225,7 +225,7 @@ export function DashboardBarChart(props: {
             <ToggleButton
               id={"year"}
               className={({ isSelected }) =>
-                `rounded-2xl border-none px-16 ${isSelected ? "bg-black text-white shadow" : "bg-white"}`
+                `rounded-2xl border-none px-16 py-4 ${isSelected ? "bg-black text-white shadow" : "bg-white"}`
               }
             >
               Year
