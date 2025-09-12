@@ -1,6 +1,6 @@
 import { XIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { data, useFetcher, useLoaderData } from "react-router";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Await, data, useFetcher, useLoaderData } from "react-router";
 import { runtimeEnv } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
 import { DashboardBarChart } from "../../../widgets/dashboard-chart/ui/dashboard-chart";
@@ -24,15 +24,11 @@ export type Transaction = {
 };
 
 export async function indexLoader(): Promise<{
-  transactions: Transaction[];
-  rates: Rate;
+  transactions: Promise<Transaction[]>;
+  rates: Promise<Rate>;
 }> {
-  const transactions = await pb
-    .collection("transactions")
-    .getFullList<Transaction>();
-  const BASE_URL = runtimeEnv.BACKEND_URL;
-  const res = await fetch(`${BASE_URL}/rates`);
-  const rates: Rate = await res.json();
+  const transactions = pb.collection("transactions").getFullList<Transaction>();
+  const rates = fetchRates();
   return { transactions, rates };
 }
 
@@ -89,7 +85,6 @@ export const Dashboard = () => {
   );
   const fetcher = useFetcher();
   let errors = fetcher.data?.errors;
-  console.log("err", errors);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const descriptionInputRef = useRef<HTMLInputElement>(null);
   const chartSectionRef = useRef<HTMLElement>(null);
@@ -106,9 +101,21 @@ export const Dashboard = () => {
       <section className="rounded-2xl bg-white px-16 py-16 outline outline-1 outline-black/10">
         <main>
           <ul className="flex gap-10">
-            {Object.entries(rates.rates).map(([key, value]) => (
-              <DashboardChipItem key={key} currency={key} value={value} />
-            ))}
+            <Suspense fallback={<div className="h-[68px]">...</div>}>
+              <Await resolve={rates}>
+                {(resolvedRates) => (
+                  <>
+                    {Object.entries(resolvedRates.rates).map(([key, value]) => (
+                      <DashboardChipItem
+                        key={key}
+                        currency={key}
+                        value={value}
+                      />
+                    ))}
+                  </>
+                )}
+              </Await>
+            </Suspense>
           </ul>
         </main>
       </section>
@@ -209,17 +216,34 @@ export const Dashboard = () => {
               <li className="font-medium">Amount</li>
             </ul>
             <div className="grid grid-rows-[1fr_1fr_1fr] gap-2">
-              {transactions.map((transaction) => (
-                <TransactionItem
-                  key={transaction.id}
-                  transaction={transaction}
-                />
-              ))}
+              <Suspense fallback={<div>loading...</div>}>
+                <Await resolve={transactions}>
+                  {(transactions: Transaction[]) => (
+                    <>
+                      {transactions.map((transaction) => (
+                        <TransactionItem
+                          key={transaction.id}
+                          transaction={transaction}
+                        />
+                      ))}
+                    </>
+                  )}
+                </Await>
+              </Suspense>
             </div>
           </footer>
         </div>
       </section>
-      <DashboardBarChart chartSectionRef={chartSectionRef} />
+      <Suspense fallback={<div>loading...</div>}>
+        <Await resolve={transactions}>
+          {(transactions) => (
+            <DashboardBarChart
+              chartSectionRef={chartSectionRef}
+              transactions={transactions}
+            />
+          )}
+        </Await>
+      </Suspense>
     </div>
   );
 };
@@ -254,4 +278,9 @@ export function TransactionItem(props: { transaction: Transaction }) {
       </span>
     </section>
   );
+}
+
+async function fetchRates(): Promise<Rate> {
+  const res = await fetch(`${runtimeEnv.BACKEND_URL}/rates`);
+  return res.json();
 }

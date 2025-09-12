@@ -55,8 +55,9 @@ const years = [2022, 2023, 2024, 2025];
 
 export function DashboardBarChart(props: {
   chartSectionRef: RefObject<HTMLElement | null>;
+  transactions: Transaction[];
 }) {
-  const { transactions } = useLoaderData<IndexLoaderData>();
+  // const { transactions } = useLoaderData<IndexLoaderData>();
 
   const [currentMonth, setCurrentMonth] = useState(() => {
     const month = new Date().getMonth();
@@ -93,7 +94,7 @@ export function DashboardBarChart(props: {
     }
     if (selectedActiveChartTab.has("month")) {
       const filteredTransactions = filterTransactionsByMonth(
-        transactions,
+        props.transactions,
         currentMonth,
         currentYear,
       );
@@ -148,7 +149,7 @@ export function DashboardBarChart(props: {
     }
     if (selectedActiveChartTab.has("year")) {
       const filteredTransactions = filterTransactionsByYear(
-        transactions,
+        props.transactions,
         currentYear,
       );
       console.log(
@@ -198,7 +199,7 @@ export function DashboardBarChart(props: {
         ],
       });
     }
-  }, [selectedActiveChartTab, currentMonth, currentYear, transactions]);
+  }, [selectedActiveChartTab, currentMonth, currentYear, props.transactions]);
 
   return (
     <section className="pb-8">
@@ -269,11 +270,7 @@ export function DashboardBarChart(props: {
               </span>
             </Button>
             <Popover>
-              <ListBox
-                className={
-                  "outline-solid rounded-md bg-black px-16 py-4 text-white shadow outline-zinc-300/10"
-                }
-              >
+              <ListBox className={"rounded-2xl bg-black px-16 py-4 text-white"}>
                 {years.map((year) => (
                   <ListBoxItem id={year} key={year}>
                     {year}
@@ -312,14 +309,14 @@ function getDaysInMonth(currentMonth: string) {
 }
 
 function getIncomeTransactionsByDay(
-  transactions: Transaction[],
+  filteredTransactions: Transaction[],
   currentMonth: string,
 ) {
   let daysInMonth = Array.from(
     { length: getDaysInMonth(currentMonth) },
     () => 0,
   );
-  transactions.forEach((transaction) => {
+  filteredTransactions.forEach((transaction) => {
     if (transaction.type === "income") {
       const day = new Date(transaction.date).getDate();
       daysInMonth[day - 1] = daysInMonth[day - 1] + transaction.amount;
@@ -328,14 +325,14 @@ function getIncomeTransactionsByDay(
   return daysInMonth;
 }
 function getExpenseTransactionsByDay(
-  transactions: Transaction[],
+  filteredTransactions: Transaction[],
   currentMonth: string,
 ) {
   let daysInMonth = Array.from(
     { length: getDaysInMonth(currentMonth) },
     () => 0,
   );
-  transactions.forEach((transaction) => {
+  filteredTransactions.forEach((transaction) => {
     if (transaction.type === "expense") {
       const day = new Date(transaction.date).getDate();
       daysInMonth[day - 1] = daysInMonth[day - 1] + transaction.amount;

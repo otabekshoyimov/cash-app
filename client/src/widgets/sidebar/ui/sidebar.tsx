@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode, type SVGProps } from "react";
-import { NavLink, useLocation } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 
 export function Sidebar(props: { isDesktop: boolean }) {
   return <>{props.isDesktop ? <DesktopNav /> : <MobileNav />}</>;
@@ -23,7 +23,7 @@ function DesktopNav() {
   return (
     <nav className="ml-8 flex w-[250px] flex-col rounded-2xl bg-white text-zinc-500 outline outline-1 outline-black/10">
       <header className="px-18 py-16 text-lg font-medium text-[#01b741]">
-        $ Cash app
+        <Link to={"/"}>$ Cash app</Link>
       </header>
       <div className="flex flex-1 flex-col px-16 text-sm">
         <div className="flex flex-col gap-1 text-base">
@@ -75,7 +75,9 @@ function MobileNav() {
   return (
     <nav className="relative z-10">
       <div className="flex justify-between px-8 pb-8">
-        <span className="text-lg font-medium text-[#00e012]">$ Cash app</span>
+        <Link to={"/"} className="text-lg font-medium text-[#00e012]">
+          $ Cash app
+        </Link>
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           className={`${isOpen ? "bg-white text-black" : "bg-black"} relative z-50 rounded-2xl border border-gray-300 px-8 py-4`}
