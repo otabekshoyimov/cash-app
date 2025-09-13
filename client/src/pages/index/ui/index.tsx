@@ -129,7 +129,7 @@ export const Dashboard = () => {
           )}
         </Await>
       </Suspense>
-      <section className="h-full rounded-2xl bg-white px-16 py-16 outline outline-1 outline-black/10">
+      <section className="mb-8 h-full rounded-2xl bg-white px-16 py-16 outline outline-1 outline-black/10">
         <div>
           <header className="flex justify-between gap-10 pb-10">
             <div>Search</div>

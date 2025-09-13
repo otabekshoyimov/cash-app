@@ -201,7 +201,7 @@ export function DashboardBarChart(props: {
   }, [selectedActiveChartTab, currentMonth, currentYear, props.transactions]);
 
   return (
-    <section className="pb-8">
+    <section className="">
       <header className="flex flex-wrap gap-8 px-8 py-8 text-base">
         <div className="flex flex-1 flex-wrap gap-8">
           <ToggleButtonGroup
