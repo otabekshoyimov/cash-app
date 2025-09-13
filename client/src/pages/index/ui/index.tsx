@@ -1,7 +1,7 @@
 import { XIcon } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Await, data, useFetcher, useLoaderData } from "react-router";
-import { runtimeEnv } from "../../../env";
+import { env } from "../../../env";
 import { pb } from "../../../shared/api/pocketbase";
 import { DashboardBarChart } from "../../../widgets/dashboard-chart/ui/dashboard-chart";
 import { ActionButton } from "../../cash/ui/cash-page";
@@ -281,6 +281,6 @@ export function TransactionItem(props: { transaction: Transaction }) {
 }
 
 async function fetchRates(): Promise<Rate> {
-  const res = await fetch(`${runtimeEnv.BACKEND_URL}/rates`);
+  const res = await fetch(`${env.BACKEND_URL}/rates`);
   return res.json();
 }

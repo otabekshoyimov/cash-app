@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  VITE_BACKEND_URL: z.string(),
+  VITE_BACKEND_URL: z.url(),
+  VITE_PB_URL: z.url(),
 });
 
 let parsedEnv;
@@ -16,6 +17,7 @@ try {
   throw error;
 }
 
-export const runtimeEnv = {
+export const env = {
   BACKEND_URL: parsedEnv.VITE_BACKEND_URL,
+  VITE_PB_URL: parsedEnv.VITE_PB_URL,
 };

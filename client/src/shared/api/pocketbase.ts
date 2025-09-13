@@ -1,4 +1,4 @@
 import PocketBase from "pocketbase";
+import { env } from "../../env";
 
-const API_URL = "https://cash-app-production-b1fe.up.railway.app";
-export const pb = new PocketBase(API_URL);
+export const pb = new PocketBase(env.VITE_PB_URL);
