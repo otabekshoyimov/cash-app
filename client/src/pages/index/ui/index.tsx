@@ -119,6 +119,16 @@ export const Dashboard = () => {
           </ul>
         </main>
       </section>
+      <Suspense fallback={<div>loading...</div>}>
+        <Await resolve={transactions}>
+          {(transactions) => (
+            <DashboardBarChart
+              chartSectionRef={chartSectionRef}
+              transactions={transactions}
+            />
+          )}
+        </Await>
+      </Suspense>
       <section className="h-full rounded-2xl bg-white px-16 py-16 outline outline-1 outline-black/10">
         <div>
           <header className="flex justify-between gap-10 pb-10">
@@ -234,16 +244,6 @@ export const Dashboard = () => {
           </footer>
         </div>
       </section>
-      <Suspense fallback={<div>loading...</div>}>
-        <Await resolve={transactions}>
-          {(transactions) => (
-            <DashboardBarChart
-              chartSectionRef={chartSectionRef}
-              transactions={transactions}
-            />
-          )}
-        </Await>
-      </Suspense>
     </div>
   );
 };

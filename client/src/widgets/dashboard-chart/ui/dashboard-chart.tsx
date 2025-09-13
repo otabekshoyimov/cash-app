@@ -294,7 +294,7 @@ export function DashboardBarChart(props: {
       <main
         ref={props.chartSectionRef}
         className="rounded-2xl bg-white outline outline-1 outline-black/10"
-        style={{ width: "100%", height: "360px" }}
+        style={{ width: "100%", height: "300px" }}
       ></main>
     </section>
   );
