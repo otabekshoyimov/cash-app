@@ -48,3 +48,4 @@ app.listen(PORT, () => {
     styleText("magenta", `server is running on http://localhost:${PORT}`)
   );
 });
+console.log("t");
