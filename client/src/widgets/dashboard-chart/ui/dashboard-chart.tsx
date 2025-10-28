@@ -151,14 +151,6 @@ export function DashboardBarChart(props: {
         props.transactions,
         currentYear,
       );
-      console.log(
-        "Income:",
-        getIncomeTransactionsByMonth(filteredTransactions),
-      );
-      console.log(
-        "Expense:",
-        getExpenseTransactionsByMonth(filteredTransactions),
-      );
 
       return chartRef.current.setOption({
         title: {
