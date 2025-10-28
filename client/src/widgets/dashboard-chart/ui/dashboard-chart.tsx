@@ -206,6 +206,7 @@ export function DashboardBarChart(props: {
         <div className="flex flex-1 flex-wrap gap-8">
           <ToggleButtonGroup
             selectionMode="single"
+            disallowEmptySelection
             selectedKeys={selectedActiveChartTab}
             className={
               "outline-solid flex items-center rounded-2xl bg-white shadow outline-zinc-300/10"
